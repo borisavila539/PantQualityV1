@@ -12,3 +12,6 @@ export interface MedidasInterface{
     M37: number,
     M38: number
 }
+export interface medidasProps{
+    text: string
+}

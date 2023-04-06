@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, View } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import { grey } from '../components/colores';
 import { TextInputContainer } from '../components/TextInputContainer';
