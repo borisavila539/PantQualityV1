@@ -2,11 +2,14 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import LoginScreen from '../screens/LoginScreen';
-import { OrdenesScreen } from '../screens/OrdenesScreen';
+import OrdenesScreen from '../screens/OrdenesScreen';
+import MedidasScreen from '../screens/MedidasScreen';
+
 
 export type RootStackParams = {
     LoginScreen: undefined,
-    OrdenesScreen: undefined
+    OrdenesScreen: undefined,
+    MedidasScreen: undefined
 }
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -21,6 +24,7 @@ export const Navigation = () => {
             }>
             <Stack.Screen name='LoginScreen' options={{ title: 'LoginScreen' }} component={LoginScreen} />
             <Stack.Screen name='OrdenesScreen' options={{ title: 'OrdenesScreen' }} component={OrdenesScreen} />
+            <Stack.Screen name='MedidasScreen' options={{ title: 'MedidasScreen' }} component={MedidasScreen} />
         </Stack.Navigator>
     )
 }

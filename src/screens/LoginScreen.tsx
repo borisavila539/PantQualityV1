@@ -7,6 +7,7 @@ import { reqResApi } from '../api/reqResApi'
 import { Credencials, Data, LoginInterface, LoginInterfaceFail } from '../interfaces/reqResApi';
 import { StackScreenProps } from '@react-navigation/stack'
 import { grey, navy, orange } from '../components/colores'
+import MyAlert from '../components/myAlert'
 
 interface Props extends StackScreenProps<any, any> { };
 
@@ -15,6 +16,10 @@ const LoginScreen = ({ navigation }: Props) => {
   const [contrasena, setContrasena] = useState<string>("");
   const [enviando, setEnviando] = useState<Boolean>(false);
   const [viewPassword, setViewPassword] = useState<boolean>(true);
+  const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
+  const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
+  const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
+
   const login = async () => {
     setEnviando(true);
     const data: Credencials = { UserAccount: usuario, Password: contrasena };
@@ -22,10 +27,12 @@ const LoginScreen = ({ navigation }: Props) => {
     await reqResApi.post<LoginInterface>('authentication/movil', data)
       .then(resp => {
         if (resp.data.Message === 'Ok') {
-          navigation.navigate('OrdenesScreen')
+          navigation.navigate('MedidasScreen')
         }
       }).catch(resp => {
-        console.log(resp)
+        setMensajeAlerta('Usuario o contraseña incorrecta...')
+        setTipoMensaje(false);
+        setShowMensajeAlerta(true);
       });
 
     setEnviando(false);
@@ -64,13 +71,13 @@ const LoginScreen = ({ navigation }: Props) => {
               value={contrasena}
             />
             <Pressable onPress={() => setViewPassword(!viewPassword)}>
-            <Text>
-                  <Icon name={viewPassword? 'eye':'eye-off'} size={20} color={grey} />
-                </Text>
+              <Text>
+                <Icon name={viewPassword ? 'eye' : 'eye-off'} size={20} color={grey} />
+              </Text>
             </Pressable>
-            
-                
-                
+
+
+
           </View>
           <View style={{ width: '100%', marginTop: 10, alignItems: 'center' }}>
             <TouchableOpacity
@@ -92,7 +99,7 @@ const LoginScreen = ({ navigation }: Props) => {
         </View>
 
       </View>
-
+      <MyAlert visible={showMensajeAlerta} tipoMensaje = {tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)}/>
     </View>
   )
 }
@@ -124,8 +131,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 20,
     paddingHorizontal: 20,
-    //backgroundColor: '#FFF8F3',
-    //borderRadius: 20
   },
   textInputAlign: {
     flexDirection: 'row',
