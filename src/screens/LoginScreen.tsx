@@ -6,7 +6,7 @@ import { TextButtons } from '../components/Constant'
 import { reqResApi } from '../api/reqResApi'
 import { Credencials, Data, LoginInterface, LoginInterfaceFail } from '../interfaces/reqResApi';
 import { StackScreenProps } from '@react-navigation/stack'
-import { grey, navy, orange } from '../components/colores'
+import { blue, grey, navy, orange } from '../components/colores'
 import MyAlert from '../components/myAlert'
 
 interface Props extends StackScreenProps<any, any> { };
@@ -14,7 +14,7 @@ interface Props extends StackScreenProps<any, any> { };
 const LoginScreen = ({ navigation }: Props) => {
   const [usuario, setUsuario] = useState<string>("");
   const [contrasena, setContrasena] = useState<string>("");
-  const [enviando, setEnviando] = useState<Boolean>(false);
+  const [enviando, setEnviando] = useState<boolean>(false);
   const [viewPassword, setViewPassword] = useState<boolean>(true);
   const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
   const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
@@ -43,7 +43,7 @@ const LoginScreen = ({ navigation }: Props) => {
     <View style={{ flex: 1, position: 'relative' }}>
       <View style={styles.container}>
         <View style={styles.containerImage}>
-          <Text>Imagen</Text>
+          <Text style={{color: navy}}>Imagen</Text>
         </View>
         <View style={styles.containerInputs}>
           <View style={styles.textInputAlign}>
@@ -85,6 +85,7 @@ const LoginScreen = ({ navigation }: Props) => {
               activeOpacity={0.5}
               onPress={login}
               hitSlop={{ top: 10, bottom: 20, left: 20, right: 20 }}
+              disabled={enviando}
             >
               <View style={styles.button}>
                 {
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     alignItems: 'center',
-    backgroundColor: navy
+    backgroundColor: blue
   },
   containerImage: {
     width: '100%',
