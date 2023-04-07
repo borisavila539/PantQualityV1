@@ -2,9 +2,9 @@ import React from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { TextInputInterface } from '../interfaces/textinputInterface'
 import { FontFamily, TextoPantallas } from './Constant'
-import { navy } from './colores'
+import { blue, grey, navy } from './colores'
 
-export const TextInputContainer = ({ title, justify, height, placeholder, teclado, multiline, editable, onChangeText, value, maxlength }: TextInputInterface) => {
+const TextInputContainer = ({ title, justify, height, placeholder, teclado, multiline, editable, onChangeText, value, maxlength }: TextInputInterface) => {
     return (
         <View style={styles.textInput}>
             <Text style={styles.text}>{title}</Text>
@@ -17,6 +17,7 @@ export const TextInputContainer = ({ title, justify, height, placeholder, teclad
 
                     }]}
                 placeholder={placeholder}
+                placeholderTextColor={blue}
                 keyboardType={teclado}
                 multiline={multiline}
                 editable={editable}
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         maxHeight: 100,
         fontSize: 18,
-        backgroundColor: '#f0f0f0',
+        backgroundColor: '#fff',
         height: 35,
         borderColor: '#000',
         padding: 2,
@@ -55,3 +56,5 @@ const styles = StyleSheet.create({
     }
 
 });
+
+export default TextInputContainer
