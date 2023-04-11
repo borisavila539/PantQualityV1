@@ -27,7 +27,7 @@ const LoginScreen = ({ navigation }: Props) => {
     await reqResApi.post<LoginInterface>('authentication/movil', data)
       .then(resp => {
         if (resp.data.Message === 'Ok') {
-          navigation.navigate('LavadoScreen')
+          navigation.navigate('OrdenesScreen')
         }
       }).catch(resp => {
         setMensajeAlerta('Usuario o contraseña incorrecta...')
