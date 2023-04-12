@@ -16,7 +16,6 @@ const Header = () => {
         <Pressable >
             <Text>
             <Icon name='arrow-back-sharp' size={20} color={grey} />
-                
             </Text>
         </Pressable>
         <Text style={styles.text}>{ordenesState.orden}</Text>
