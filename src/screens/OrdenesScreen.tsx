@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, FC } from 'react'
 import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native';
 import { reqResApiFinanza } from '../api/reqResApi'
 import { OrdennesIniciadasInterface } from '../interfaces/ordenesIniciadasInterface';
-import { blue, grey, navy } from '../components/colores';
+import { grey, navy, orange } from '../components/colores';
 import { OrdenesContext } from '../context/OrdenesContext';
 import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -19,17 +19,33 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   const { changeOrden } = useContext(OrdenesContext)
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [Filtro, setFiltro] = useState<string>('');
+  const [page, setPage] = useState<number>(0);
 
   const getOrdenesIniciadas = async () => {
 
     try {
-      const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas');
-      setOrdenes(request.data)
+      const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/0/15');
+      setOrdenes(request.data);
       setOrdenesShow(request.data)
+      setPage(1)
     } catch (err) {
 
     }
   }
+
+  const getOrdenesIniciadasMas = async () => {
+
+    try {
+      const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/'+page+'/15');
+      setOrdenes(ordenes.concat(request.data));
+      setOrdenesShow(ordenesShow.concat(request.data))
+      setPage(page+1)
+
+    } catch (err) {
+
+    }
+  }
+
 
   const onPress = (orden: string) => {
     changeOrden(orden);
@@ -90,17 +106,23 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
           />
         </View>
       </View>
+      {
+        ordenesShow.length == 0 ?
+          <ActivityIndicator color={orange} />
+          :
+          <FlatList
+            data={ordenesShow}
+            keyExtractor={(item) => item.prodmasterid.toString()}
+            renderItem={({ item }) => renderItem(item)}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={() => getOrdenesIniciadas()} colors={['#069A8E']} />
+            }
+            onEndReached={getOrdenesIniciadasMas}
+            showsVerticalScrollIndicator={false}
+            style={{ backgroundColor: grey }}
+          />
+      }
 
-      <FlatList
-        data={ordenesShow}
-        keyExtractor={(item) => item.prodmasterid.toString()}
-        renderItem={({ item }) => renderItem(item)}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={() => getOrdenesIniciadas()} colors={['#069A8E']} />
-        }
-        showsVerticalScrollIndicator={false}
-        style={{ backgroundColor: grey }}
-      />
     </View>
   )
 }
