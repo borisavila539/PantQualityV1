@@ -29,8 +29,8 @@ export const Navigation = () => {
             <Stack.Screen name='LoginScreen' options={{ title: 'LoginScreen' }} component={LoginScreen} />
             <Stack.Screen name='OrdenesScreen' options={{ title: 'OrdenesScreen' }} component={OrdenesScreen} />
             <Stack.Screen name='MedidasScreen' options={{ title: 'MedidasScreen' }} component={MedidasScreen} />
-            <Stack.Screen name='TipoMedidaScreen' options={{title: 'TipoMedidaScreen'}} component={TipoMedidaScreen}/>
-            <Stack.Screen name='LavadoScreen' options={{title: 'LavadoScreen'}} component={LavadoScreen}/>
+            <Stack.Screen name='TipoMedidaScreen' options={{ title: 'TipoMedidaScreen' }} component={TipoMedidaScreen} />
+            <Stack.Screen name='LavadoScreen' options={{ title: 'LavadoScreen' }} component={LavadoScreen} />
         </Stack.Navigator>
     )
 }

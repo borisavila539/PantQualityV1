@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { View, StyleSheet, TextInput, Alert, TouchableOpacity, Text, Pressable } from 'react-native'
+import React, { FC, useState } from 'react'
+import { View, StyleSheet, TextInput, Alert, TouchableOpacity, Text, Pressable, ActivityIndicator } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import { TextButtons } from '../components/Constant'
@@ -8,10 +8,11 @@ import { Credencials, Data, LoginInterface, LoginInterfaceFail } from '../interf
 import { StackScreenProps } from '@react-navigation/stack'
 import { blue, grey, navy, orange } from '../components/colores'
 import MyAlert from '../components/myAlert'
+import { RootStackParams } from '../navigation/Navigation'
 
-interface Props extends StackScreenProps<any, any> { };
+type props = StackScreenProps<RootStackParams, "LoginScreen">;
 
-const LoginScreen = ({ navigation }: Props) => {
+const LoginScreen: FC<props> = ({ navigation }) => {
   const [usuario, setUsuario] = useState<string>("");
   const [contrasena, setContrasena] = useState<string>("");
   const [enviando, setEnviando] = useState<boolean>(false);
@@ -21,21 +22,24 @@ const LoginScreen = ({ navigation }: Props) => {
   const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
 
   const login = async () => {
-    setEnviando(true);
-    const data: Credencials = { UserAccount: usuario, Password: contrasena };
+    try {
+      setEnviando(true);
+      const data: Credencials = { UserAccount: usuario, Password: contrasena };
+      const request = await reqResApi.post<LoginInterface>('authentication/movil', data);
 
-    await reqResApi.post<LoginInterface>('authentication/movil', data)
-      .then(resp => {
-        if (resp.data.Message === 'Ok') {
-          navigation.navigate('OrdenesScreen')
-        }
-      }).catch(resp => {
-        setMensajeAlerta('Usuario o contraseña incorrecta...')
-        setTipoMensaje(false);
-        setShowMensajeAlerta(true);
-      });
+      if (request.data.Message === 'Ok') {
+        navigation.replace("OrdenesScreen")
+      }
 
-    setEnviando(false);
+      setEnviando(false);
+    } catch (err) {
+
+      setMensajeAlerta('Usuario o contraseña incorrecta...')
+      setTipoMensaje(false);
+      setShowMensajeAlerta(true);
+      setEnviando(false);
+
+    }
 
   }
 
@@ -43,7 +47,7 @@ const LoginScreen = ({ navigation }: Props) => {
     <View style={{ flex: 1, position: 'relative' }}>
       <View style={styles.container}>
         <View style={styles.containerImage}>
-          <Text style={{color: navy}}>Imagen</Text>
+          <Text style={{ color: navy }}>Imagen</Text>
         </View>
         <View style={styles.containerInputs}>
           <View style={styles.textInputAlign}>
@@ -92,7 +96,7 @@ const LoginScreen = ({ navigation }: Props) => {
                   !enviando ?
                     <Text style={[styles.text]}>Iniciar Sesion</Text>
                     :
-                    <Text style={[styles.text]}>Iniciando...</Text>
+                    <ActivityIndicator color="#FFF" />
                 }
               </View>
             </TouchableOpacity>
@@ -100,7 +104,7 @@ const LoginScreen = ({ navigation }: Props) => {
         </View>
 
       </View>
-      <MyAlert visible={showMensajeAlerta} tipoMensaje = {tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)}/>
+      <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
     </View>
   )
 }

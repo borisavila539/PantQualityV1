@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { FC, useContext } from 'react'
 import { SafeAreaView, View, StyleSheet, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler'
 import { blue, grey } from '../components/colores';
@@ -7,10 +7,12 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { OrdenesContext } from '../context/OrdenesContext';
 import { TextButtons } from '../components/Constant';
 import Header from '../components/Header';
+import { RootStackParams } from '../navigation/Navigation';
 
-interface Props extends StackScreenProps<any, any> { };
+type props = StackScreenProps<RootStackParams, "TipoMedidaScreen">;
 
-const TipoMedidaScreen = ({ navigation }: Props) => {
+
+const TipoMedidaScreen:FC<props> = ({ navigation }) => {
 
     const {ordenesState, changemedida} = useContext(OrdenesContext);
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react'
+import React, { useEffect, useState, useContext, FC } from 'react'
 import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native';
 import { reqResApiFinanza } from '../api/reqResApi'
 import { OrdennesIniciadasInterface } from '../interfaces/ordenesIniciadasInterface';
@@ -7,10 +7,12 @@ import { OrdenesContext } from '../context/OrdenesContext';
 import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { FontFamily, IconHeader, TextButtons } from '../components/Constant';
+import { RootStackParams } from '../navigation/Navigation';
 
-interface Props extends StackScreenProps<any, any> { };
+type props = StackScreenProps<RootStackParams, "OrdenesScreen">;
 
-const OrdenesScreen = ({ navigation }: Props) => {
+
+const OrdenesScreen: FC<props> = ({ navigation }) => {
   const [ordenes, setOrdenes] = useState<OrdennesIniciadasInterface[]>([])
   const [ordenesShow, setOrdenesShow] = useState<OrdennesIniciadasInterface[]>([])
 
@@ -19,14 +21,14 @@ const OrdenesScreen = ({ navigation }: Props) => {
   const [Filtro, setFiltro] = useState<string>('');
 
   const getOrdenesIniciadas = async () => {
-    await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas')
-      .then(resp => {
-        setOrdenes(resp.data)
-        setOrdenesShow(resp.data)
-      }).catch(resp => {
-        console.log(resp)
-        console.log('no')
-      });
+
+    try{
+      const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas');
+      setOrdenes(request.data)
+      setOrdenesShow(request.data)
+    }catch(err){
+        
+    }
   }
 
   const onPress = (orden: string) => {

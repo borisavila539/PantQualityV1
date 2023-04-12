@@ -3,24 +3,32 @@ import { Pressable, StyleSheet, Text } from 'react-native'
 import { View } from 'react-native'
 import { OrdenesContext } from '../context/OrdenesContext'
 import { TextoHeader } from './Constant'
-import {  grey, navy } from './colores'
-import { StackScreenProps } from '@react-navigation/stack'
+import { grey, navy } from './colores'
 import Icon from 'react-native-vector-icons/Ionicons'
-
-interface Props extends StackScreenProps<any, any> { };
+import { useNavigation } from '@react-navigation/native'
+import { RootStackParams } from '../navigation/Navigation'
+import { StackNavigationProp } from '@react-navigation/stack'
 
 const Header = () => {
-    const {ordenesState} = useContext(OrdenesContext)
-  return (
-    <View style={styles.header}>
-        <Pressable >
-            <Text>
-            <Icon name='arrow-back-sharp' size={20} color={grey} />
-            </Text>
-        </Pressable>
-        <Text style={styles.text}>{ordenesState.orden}</Text>
-    </View>
-  )
+    const { ordenesState } = useContext(OrdenesContext);
+    const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+
+    const navigateBack = () => {
+        if (navigation.canGoBack()) {
+            navigation.goBack();
+        }
+    }
+
+    return (
+        <View style={styles.header}>
+            <Pressable onPress={navigateBack}>
+                <Text>
+                    <Icon name='arrow-back-sharp' size={20} color={grey} />
+                </Text>
+            </Pressable>
+            <Text style={styles.text}>{ordenesState.orden}</Text>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
