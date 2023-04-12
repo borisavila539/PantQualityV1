@@ -1,7 +1,6 @@
-export interface OrdennesIniciadasInterface
-{
+export interface OrdennesIniciadasInterface {
     prodmasterrefid: string;
     prodmasterid: string;
     itemid: string;
-    loweststatus:string;
+    loweststatus: string;
 };

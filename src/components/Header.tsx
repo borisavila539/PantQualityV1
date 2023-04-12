@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useState } from 'react'
+import React, { useContext } from 'react'
 import { Pressable, StyleSheet, Text } from 'react-native'
 import { View } from 'react-native'
 import { OrdenesContext } from '../context/OrdenesContext'

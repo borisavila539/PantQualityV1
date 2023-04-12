@@ -4,28 +4,28 @@ export interface Credencials {
 }
 
 export interface LoginInterfaceFail {
-    $id:     string;
+    $id: string;
     Message: string;
 }
 
 export interface LoginInterface {
-    $id:     string;
-    Data:    Data;
-    Type:    string;
+    $id: string;
+    Data: Data;
+    Type: string;
     Message: string;
 }
 
 export interface Data {
-    $id:     string;
-    Token:   string;
+    $id: string;
+    Token: string;
     Usuario: Usuario;
     Empresa: string;
-    Nombre:  string;
+    Nombre: string;
     Accesos: null;
 }
 
 export interface Usuario {
-    $id:       string;
+    $id: string;
     IdUsuario: string;
-    Pin:       null;
+    Pin: null;
 }

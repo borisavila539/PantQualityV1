@@ -12,9 +12,9 @@ import { RootStackParams } from '../navigation/Navigation';
 type props = StackScreenProps<RootStackParams, "TipoMedidaScreen">;
 
 
-const TipoMedidaScreen:FC<props> = ({ navigation }) => {
+const TipoMedidaScreen: FC<props> = ({ navigation }) => {
 
-    const {ordenesState, changemedida} = useContext(OrdenesContext);
+    const { ordenesState, changemedida } = useContext(OrdenesContext);
 
     const irMedidasCinturaAlta = () => {
         changemedida('Cintura Alta')
@@ -65,7 +65,7 @@ const TipoMedidaScreen:FC<props> = ({ navigation }) => {
         changemedida('Pantorrilla')
         navigation.navigate('MedidasScreen')
     }
-    
+
     const irMedidasRuedo = () => {
         changemedida('Ruedo')
         navigation.navigate('MedidasScreen')
@@ -78,7 +78,7 @@ const TipoMedidaScreen:FC<props> = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header/>
+            <Header />
             <ScrollView style={{ height: '100%', backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontFamily: 'sans-serif',
         marginBottom: 10
-      }
+    }
 });
 
 export default TipoMedidaScreen;

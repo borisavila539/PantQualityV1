@@ -22,12 +22,12 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
 
   const getOrdenesIniciadas = async () => {
 
-    try{
+    try {
       const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas');
       setOrdenes(request.data)
       setOrdenesShow(request.data)
-    }catch(err){
-        
+    } catch (err) {
+
     }
   }
 

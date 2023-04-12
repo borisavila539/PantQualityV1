@@ -1,5 +1,5 @@
 
-export interface MedidasInterface{
+export interface MedidasInterface {
     M28: number,
     M29: number,
     M30: number,
@@ -12,6 +12,6 @@ export interface MedidasInterface{
     M37: number,
     M38: number
 }
-export interface medidasProps{
+export interface medidasProps {
     text: string
 }

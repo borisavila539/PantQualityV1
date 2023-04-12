@@ -1,4 +1,4 @@
-export interface TextInputInterface{
+export interface TextInputInterface {
     title: string,
     justify: boolean,
     height: number,
@@ -6,7 +6,7 @@ export interface TextInputInterface{
     teclado: any,
     multiline: boolean,
     editable: boolean,
-    onChangeText : Function,
+    onChangeText: Function,
     value: string,
     maxlength: number
 }

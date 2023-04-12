@@ -1,4 +1,4 @@
-export interface myAlertInterface{
+export interface myAlertInterface {
     visible: boolean,
     tipoMensaje: boolean,
     mensajeAlerta: string,
