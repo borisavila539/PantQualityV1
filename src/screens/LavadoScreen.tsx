@@ -1,5 +1,5 @@
-import React, { FC, useContext } from 'react'
-import { SafeAreaView, View, StyleSheet } from 'react-native';
+import React, { FC, useContext, useState, useEffect } from 'react'
+import { SafeAreaView, View, StyleSheet, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler'
 import { grey } from '../components/colores';
 import Buttons from '../components/Buttons';
@@ -7,11 +7,29 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { OrdenesContext } from '../context/OrdenesContext';
 import Header from '../components/Header';
 import { RootStackParams } from '../navigation/Navigation';
+import TextInputContainer from '../components/TextInputContainer';
+import { ObjectHeigth } from '../components/Constant';
+import { reqResApiFinanza } from '../api/reqResApi';
+import { MaesterOrdenInterface } from '../interfaces/MasterOrden';
 
 type props = StackScreenProps<RootStackParams, "LavadoScreen">;
 
 const LavadoScreen: FC<props> = ({ navigation }) => {
-    const { changeLavado } = useContext(OrdenesContext)
+    const { changeLavado, ordenesState, changeFileName } = useContext(OrdenesContext)
+    const [fileName, setFileName] = useState<string>('')
+
+    const ConsultarNombreArchivo = async () => {
+        try {
+            const request = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + ordenesState.prodmasterid + '/' + ordenesState.prodMasterRefID + '/' + ordenesState.itemid);
+            if (request.data.length > 0)
+            {
+                changeFileName(request.data[0].filename)
+                setFileName(request.data[0].filename)
+            }
+        } catch (err) {
+            console.log('no consulto nombre archivo')
+        }
+    }
 
     const onPressAntes = () => {
         changeLavado('Antes del Lavado')
@@ -23,6 +41,10 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
         navigation.navigate("TipoMedidaScreen")
     }
 
+    useEffect(() => {
+        ConsultarNombreArchivo();
+    }, [])
+
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
             <Header />
@@ -31,7 +53,22 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
                     <View style={styles.formulario}>
                         <Buttons onPressFuntion={() => onPressAntes} disable={false} title='Antes del Lavado' />
                         <Buttons onPressFuntion={() => onPressDespues} disable={false} title='Despues del lavado' />
+                        <TextInputContainer
+                            title='Nombre Archivo:'
+                            justify={true}
+                            height={ObjectHeigth}
+                            placeholder='Nombre del Archivo xlsx'
+                            teclado={'default'}
+                            multiline={false}
+                            editable={true}
+                            value={fileName}
+                            onChangeText={(value: string) => setFileName(value)}
+                            maxlength={200}
+                        />
                     </View>
+                    <Text>
+                        {ordenesState.FileName}
+                    </Text>
                 </SafeAreaView>
             </ScrollView>
         </View>

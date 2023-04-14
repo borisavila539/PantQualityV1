@@ -8,6 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { FontFamily, IconHeader, TextButtons } from '../components/Constant';
 import { RootStackParams } from '../navigation/Navigation';
+import { MaesterOrdenInterface } from '../interfaces/MasterOrden';
 
 type props = StackScreenProps<RootStackParams, "OrdenesScreen">;
 
@@ -16,61 +17,62 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   const [ordenes, setOrdenes] = useState<OrdennesIniciadasInterface[]>([])
   const [ordenesShow, setOrdenesShow] = useState<OrdennesIniciadasInterface[]>([])
 
-  const { changeOrden } = useContext(OrdenesContext)
+  const { changeProdMasterRefId, changeProdMasterId, changeItem } = useContext(OrdenesContext)
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [Filtro, setFiltro] = useState<string>('');
   const [page, setPage] = useState<number>(0);
+  const [cargando, setCargando] = useState<boolean>(false);
 
   const getOrdenesIniciadas = async () => {
+    if (!cargando) {
+      setCargando(true)
+      try {
+        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/0/15/' + (Filtro != '' ? Filtro : '-'));
+        setOrdenes(request.data);
+        setOrdenesShow(request.data)
+        setPage(1)
+      } catch (err) {
 
-    try {
-      const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/0/15');
-      setOrdenes(request.data);
-      setOrdenesShow(request.data)
-      setPage(1)
-    } catch (err) {
-
+      }
+      setCargando(false)
     }
   }
 
   const getOrdenesIniciadasMas = async () => {
+    if (!cargando) {
+      setCargando(true)
+      try {
+        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/' + page + '/15/' + (Filtro != '' ? Filtro : '-'));
+        setOrdenes(ordenes.concat(request.data));
+        setOrdenesShow(ordenesShow.concat(request.data))
+        setPage(page + 1)
 
-    try {
-      const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/'+page+'/15');
-      setOrdenes(ordenes.concat(request.data));
-      setOrdenesShow(ordenesShow.concat(request.data))
-      setPage(page+1)
+      } catch (err) {
 
-    } catch (err) {
-
+      }
+      setCargando(false)
     }
+
   }
 
 
-  const onPress = (orden: string) => {
-    changeOrden(orden);
+  const onPress = (item: OrdennesIniciadasInterface) => {
+    changeProdMasterRefId(item.prodmasterrefid);
+    changeProdMasterId(item.prodmasterid);
+    changeItem(item.itemid)
+    //Postear
     navigation.navigate('LavadoScreen');
   }
 
-  const filtrar = () => {
-    const ordenTMP: OrdennesIniciadasInterface[] = []
-    if (Filtro != '') {
-      ordenes.map(x => {
-        if (x.prodmasterrefid.includes(Filtro)) {
-          ordenTMP.push(x);
-        }
-      })
-      setOrdenesShow(ordenTMP)
-    } else {
-      setOrdenesShow(ordenes)
-    }
-
-  }
 
   const renderItem = (item: OrdennesIniciadasInterface) => {
+    const onPressOrden =(item2: OrdennesIniciadasInterface) =>{
+      //Enviar a la base de datos
+      onPress(item2)
+    }
     return (
       <View style={styles.containerRenderItem}>
-        <TouchableOpacity style={styles.renderItemTouch} onPress={() => onPress(item.prodmasterrefid)}>
+        <TouchableOpacity style={styles.renderItemTouch} onPress={() => onPressOrden(item)}>
           <View style={styles.containerIcon}>
             <Text>
               <Icon name='document-text-sharp' size={IconHeader} color={navy} />
@@ -88,15 +90,11 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   useEffect(() => {
     getOrdenesIniciadas();
   }, [])
-
-  useEffect(() => {
-    filtrar();
-  }, [Filtro])
   return (
     <View style={styles.container}>
       <View style={styles.containerBuscar}>
         <Text style={styles.text}>Buscar:</Text>
-        <View style={{ width: '90%' }}>
+        <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center' }}>
           <TextInput
             style={styles.input}
             placeholder='OP-00000000'
@@ -104,6 +102,11 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
             onChangeText={(value) => setFiltro(value)}
             value={Filtro}
           />
+          <TouchableOpacity onPress={getOrdenesIniciadas}>
+            <Text>
+              <Icon name='search-sharp' size={30} color={navy} />
+            </Text>
+          </TouchableOpacity>
         </View>
       </View>
       {
@@ -164,7 +167,8 @@ const styles = StyleSheet.create({
     borderBottomColor: navy,
     backgroundColor: grey,
     fontSize: TextButtons,
-    textAlign: 'center'
+    textAlign: 'center',
+    width: '90%'
   },
   containerBuscar: {
     width: '90%',

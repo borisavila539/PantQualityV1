@@ -26,7 +26,7 @@ const Header = () => {
                     <Icon name='arrow-back-sharp' size={20} color={grey} />
                 </Text>
             </Pressable>
-            <Text style={styles.text}>{ordenesState.orden}</Text>
+            <Text style={styles.text}>{ordenesState.prodMasterRefID}</Text>
         </View>
     )
 }

@@ -1,17 +1,31 @@
 import { OrdenesState } from "./OrdenesContext";
 
 type OrdenesAction =
-    | { type: 'changeOrden', payload: string }
+    | { type: 'changeProdMasterRefId', payload: string }
+    | { type: 'changeProdMasterID', payload: string }
+    | { type: 'changeItem', payload: string }
     | { type: 'changeLavado', payload: string }
     | { type: 'changeMedida', payload: string }
+    | { type: 'changeFileName', payload: string }
+
 
 export const OrdenesReducer = (state: OrdenesState, action: OrdenesAction): OrdenesState => {
     switch (action.type) {
-        case 'changeOrden':
+        case 'changeProdMasterRefId':
             return {
                 ...state,
-                orden: action.payload
+                prodMasterRefID: action.payload
             }
+        case 'changeProdMasterID':
+            return {
+                ...state,
+                prodmasterid: action.payload
+            }
+            case 'changeItem':
+                return {
+                    ...state,
+                    itemid: action.payload
+                }
         case 'changeLavado':
             return {
                 ...state,
@@ -21,6 +35,11 @@ export const OrdenesReducer = (state: OrdenesState, action: OrdenesAction): Orde
             return {
                 ...state,
                 medida: action.payload
+            }
+        case 'changeFileName':
+            return {
+                ...state,
+                FileName: action.payload
             }
         default:
             return state;
