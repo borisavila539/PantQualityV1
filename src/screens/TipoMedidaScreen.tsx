@@ -1,4 +1,4 @@
-import React, { FC, useContext } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import { SafeAreaView, View, StyleSheet, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler'
 import { blue, grey } from '../components/colores';
@@ -8,6 +8,8 @@ import { OrdenesContext } from '../context/OrdenesContext';
 import { TextButtons } from '../components/Constant';
 import Header from '../components/Header';
 import { RootStackParams } from '../navigation/Navigation';
+import { reqResApiFinanza } from '../api/reqResApi';
+import { MedidasInterface } from '../interfaces/medidasInterface';
 
 type props = StackScreenProps<RootStackParams, "TipoMedidaScreen">;
 
@@ -15,7 +17,23 @@ type props = StackScreenProps<RootStackParams, "TipoMedidaScreen">;
 const TipoMedidaScreen: FC<props> = ({ navigation }) => {
 
     const { ordenesState, changemedida } = useContext(OrdenesContext);
+    const [Medidas, setMedidas] = useState<MedidasInterface[]>([])
 
+    const getMedidas = async () => {
+        try {
+            const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/Medidas')
+            setMedidas(request.data)
+        } catch (err) {
+
+        }
+    }
+
+    const irTallas = (nombre: string) => {
+        //changemedida(nombre)
+        console.log('ir tallas')
+        navigation.navigate('MedidasScreen')
+
+    }
     const irMedidasCinturaAlta = () => {
         changemedida('Cintura Alta')
         navigation.navigate('MedidasScreen')
@@ -76,6 +94,18 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
         navigation.navigate('MedidasScreen')
     }
 
+    const renderButton = ()=>{
+        return Medidas.map((medida, index) => {
+            return (
+                <Buttons key={medida.id} onPressFuntion={() => {console.log(medida.nombre)}} disable={false} title={medida.nombre} />
+            )
+        })
+    }
+
+    useEffect(() => {
+        getMedidas();
+    }, [])
+
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
             <Header />
@@ -83,6 +113,15 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>
                         <Text style={styles.text}>{ordenesState.lavado}</Text>
+                        {
+                            /*Medidas.map((medida) => {
+                                return (
+                                    <Buttons key={medida.id} onPressFuntion={() => console.log(medida.nombre)} disable={false} title={medida.nombre} />
+                                )
+                            })*/
+                            renderButton()
+                        }
+                        {/*
                         <Buttons onPressFuntion={() => irMedidasCinturaAlta} disable={false} title='Cintura Alta' />
                         <Buttons onPressFuntion={() => irMedidasCinturaBaja} disable={false} title='Cintura Baja' />
                         <Buttons onPressFuntion={() => irMedidasCaderaAlta} disable={false} title='Cadera Alta' />
@@ -94,7 +133,8 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
                         <Buttons onPressFuntion={() => irMedidasRodilla} disable={false} title='Rodilla' />
                         <Buttons onPressFuntion={() => irMedidasPantorrilla} disable={false} title='Pantorrilla' />
                         <Buttons onPressFuntion={() => irMedidasRuedo} disable={false} title='Ruedo' />
-                        <Buttons onPressFuntion={() => irMedidasEntrepierna} disable={false} title='Entrepierna' />
+                        <Buttons onPressFuntion={() => irMedidasEntrepierna} disable={false} title='Entrepierna' />*/
+                        }
                     </View>
                 </SafeAreaView>
             </ScrollView>

@@ -8,11 +8,12 @@ import { OrdenesContext } from '../context/OrdenesContext';
 import Buttons from '../components/Buttons';
 import Header from '../components/Header';
 import { reqResApiFinanza } from '../api/reqResApi';
-import { MedidasInterface } from '../interfaces/medidasInterface';
+import { TallasInterface } from '../interfaces/medidasInterface';
+import { MedidaContainer } from '../components/medidaContainer';
 
 const MedidasScreen = () => {
     const { ordenesState } = useContext(OrdenesContext)
-    const [medidas, setMedidas] = useState<MedidasInterface[]>()
+    const [medidas, setMedidas] = useState<TallasInterface[]>()
 
     //Medidas
     const [M01, setM01] = useState<string>('');
@@ -82,7 +83,7 @@ const MedidasScreen = () => {
     const getMedidas = async () => {
         try {
             let size: number;
-            const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid);
+            const request = await reqResApiFinanza.get<TallasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid);
             setMedidas(request.data)
             size = request.data.length;
 
@@ -156,310 +157,28 @@ const MedidasScreen = () => {
                         <Text style={styles.text}>{ordenesState.lavado}</Text>
                         <Text style={styles.text}>{ordenesState.medida}</Text>
 
-                        {
-                            T01 &&
-                            <TextInputContainer
-                                title={'Medida ' + s01}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM01(value)}
-                                value={M01}
-                                maxlength={20}
-                            />
-                        }
+                        <MedidaContainer mostrar={T01} medida={s01} onChangeText={(value: string) => setM01(value)} value={M01} />
+                        <MedidaContainer mostrar={T02} medida={s02} onChangeText={(value: string) => setM02(value)} value={M02} />
+                        <MedidaContainer mostrar={T03} medida={s03} onChangeText={(value: string) => setM03(value)} value={M03} />
+                        <MedidaContainer mostrar={T04} medida={s04} onChangeText={(value: string) => setM04(value)} value={M04} />
+                        <MedidaContainer mostrar={T05} medida={s05} onChangeText={(value: string) => setM05(value)} value={M05} />
+                        <MedidaContainer mostrar={T06} medida={s06} onChangeText={(value: string) => setM06(value)} value={M06} />
+                        <MedidaContainer mostrar={T07} medida={s07} onChangeText={(value: string) => setM07(value)} value={M07} />
+                        <MedidaContainer mostrar={T08} medida={s08} onChangeText={(value: string) => setM08(value)} value={M08} />
+                        <MedidaContainer mostrar={T09} medida={s09} onChangeText={(value: string) => setM09(value)} value={M09} />
+                        <MedidaContainer mostrar={T10} medida={s10} onChangeText={(value: string) => setM10(value)} value={M10} />
+                        <MedidaContainer mostrar={T11} medida={s11} onChangeText={(value: string) => setM11(value)} value={M11} />
+                        <MedidaContainer mostrar={T12} medida={s12} onChangeText={(value: string) => setM12(value)} value={M12} />
+                        <MedidaContainer mostrar={T13} medida={s13} onChangeText={(value: string) => setM13(value)} value={M13} />
+                        <MedidaContainer mostrar={T14} medida={s14} onChangeText={(value: string) => setM14(value)} value={M14} />
+                        <MedidaContainer mostrar={T15} medida={s15} onChangeText={(value: string) => setM15(value)} value={M15} />
+                        <MedidaContainer mostrar={T16} medida={s16} onChangeText={(value: string) => setM16(value)} value={M16} />
+                        <MedidaContainer mostrar={T17} medida={s17} onChangeText={(value: string) => setM17(value)} value={M17} />
+                        <MedidaContainer mostrar={T18} medida={s18} onChangeText={(value: string) => setM18(value)} value={M18} />
+                        <MedidaContainer mostrar={T19} medida={s19} onChangeText={(value: string) => setM19(value)} value={M19} />
+                        <MedidaContainer mostrar={T20} medida={s20} onChangeText={(value: string) => setM20(value)} value={M20} />
 
-                        {
-                            T02 &&
-                            <TextInputContainer
-                                title={'Medida ' + s02}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM02(value)}
-                                value={M02}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T03 &&
-                            <TextInputContainer
-                                title={'Medida ' + s03}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM03(value)}
-                                value={M03}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T04 &&
-                            <TextInputContainer
-                                title={'Medida ' + s04}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM04(value)}
-                                value={M04}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T05 &&
-                            <TextInputContainer
-                                title={'Medida ' + s05}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM05(value)}
-                                value={M05}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T06 &&
-                            <TextInputContainer
-                                title={'Medida ' + s06}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM06(value)}
-                                value={M06}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T07 &&
-                            <TextInputContainer
-                                title={'Medida ' + s07}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM07(value)}
-                                value={M07}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T08 &&
-                            <TextInputContainer
-                                title={'Medida ' + s08}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM08(value)}
-                                value={M08}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T09 &&
-                            <TextInputContainer
-                                title={'Medida ' + s09}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM09(value)}
-                                value={M09}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T10 &&
-                            <TextInputContainer
-                                title={'Medida ' + s10}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM10(value)}
-                                value={M10}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T11 &&
-                            <TextInputContainer
-                                title={'Medida ' + s11}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM11(value)}
-                                value={M11}
-                                maxlength={20}
-                            />
-                        }
-
-                        {
-                            T12 &&
-                            <TextInputContainer
-                                title={'Medida ' + s12}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM12(value)}
-                                value={M12}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T13 &&
-                            <TextInputContainer
-                                title={'Medida ' + s13}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM13(value)}
-                                value={M13}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T14 &&
-                            <TextInputContainer
-                                title={'Medida ' + s14}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM14(value)}
-                                value={M14}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T15 &&
-                            <TextInputContainer
-                                title={'Medida ' + s15}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM15(value)}
-                                value={M15}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T16 &&
-                            <TextInputContainer
-                                title={'Medida ' + s16}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM16(value)}
-                                value={M16}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T17 &&
-                            <TextInputContainer
-                                title={'Medida ' + s17}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM17(value)}
-                                value={M17}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T18 &&
-                            <TextInputContainer
-                                title={'Medida ' + s18}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM18(value)}
-                                value={M18}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T19 &&
-                            <TextInputContainer
-                                title={'Medida ' + s19}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM19(value)}
-                                value={M19}
-                                maxlength={20}
-                            />
-                        }
-                        {
-                            T20 &&
-                            <TextInputContainer
-                                title={'Medida ' + s20}
-                                justify={true}
-                                height={ObjectHeigth}
-                                placeholder='0.00'
-                                teclado={'decimal-pad'}
-                                multiline={false}
-                                editable={true}
-                                onChangeText={(value: string) => setM20(value)}
-                                value={M20}
-                                maxlength={20}
-                            />
-                        }
-
-                        <Buttons onPressFuntion={() => enviarMedidas} disable={false} title='Enviar' />
+                        <Buttons key={0} onPressFuntion={() => enviarMedidas} disable={false} title='Enviar' />
                     </View>
                 </SafeAreaView>
             </ScrollView>

@@ -8,7 +8,6 @@ import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { FontFamily, IconHeader, TextButtons } from '../components/Constant';
 import { RootStackParams } from '../navigation/Navigation';
-import { MaesterOrdenInterface } from '../interfaces/MasterOrden';
 
 type props = StackScreenProps<RootStackParams, "OrdenesScreen">;
 

@@ -1,6 +1,8 @@
 import { OrdenesState } from "./OrdenesContext";
 
 type OrdenesAction =
+    | { type: 'changeUserId', payload: number }
+    | { type: 'changeOrdenId', payload: number }
     | { type: 'changeProdMasterRefId', payload: string }
     | { type: 'changeProdMasterID', payload: string }
     | { type: 'changeItem', payload: string }
@@ -11,6 +13,16 @@ type OrdenesAction =
 
 export const OrdenesReducer = (state: OrdenesState, action: OrdenesAction): OrdenesState => {
     switch (action.type) {
+        case "changeUserId":
+            return{
+                ...state,
+                idUsuario:action.payload
+            }
+        case "changeOrdenId":
+            return{
+                ...state,
+                OrdenId : action.payload
+            }
         case 'changeProdMasterRefId':
             return {
                 ...state,

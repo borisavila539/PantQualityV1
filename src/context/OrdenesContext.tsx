@@ -3,12 +3,15 @@ import { OrdenesReducer } from './OrdenesReducer';
 
 //Definir que informacion grabar
 export interface OrdenesState {
+    OrdenId: number,
     prodMasterRefID: string,
     prodmasterid: string,
     itemid: string,
     lavado: string,
     medida: string,
+    medidaId: number,
     FileName: string,
+    idUsuario: number,
 
 }
 
@@ -19,17 +22,22 @@ export const ordenesInitialState: OrdenesState = {
     itemid: '',
     lavado: '',
     medida: '',
-    FileName: ''
+    FileName: '',
+    OrdenId: 0,
+    idUsuario: 0,
+    medidaId:0
 }
 
 export interface OrdenesContextProps {
     ordenesState: OrdenesState;
+    changeOrdenId: (ordenId:number) => void;
     changeProdMasterRefId: (prodMasterRefID: string) => void;
     changeProdMasterId: (prodMasterId: string) => void;
     changeItem: (item: string) => void;
     changeLavado: (lavado: string) => void;
     changemedida: (medida: string) => void;
     changeFileName: (fileName: string) => void;
+    changeUserid: (userid: number) => void
 
 }
 
@@ -39,6 +47,9 @@ export const OrdenesContext = createContext({} as OrdenesContextProps)
 export const OrdenesProvider = ({ children }: any) => {
     const [ordenesState, dispatch] = useReducer(OrdenesReducer, ordenesInitialState)
 
+    const changeOrdenId = (ordenId: number) =>{
+        dispatch({type: 'changeOrdenId', payload: ordenId})
+    }
     const changeProdMasterRefId = (prodMasterRefID: string) => {
         dispatch({ type: 'changeProdMasterRefId', payload: prodMasterRefID })
     }
@@ -61,15 +72,21 @@ export const OrdenesProvider = ({ children }: any) => {
         dispatch({ type: 'changeFileName', payload: fileName })
     }
 
+    const changeUserid = (userid: number) =>{
+        dispatch({type:'changeUserId',payload: userid})
+    }
+
     return (
         <OrdenesContext.Provider value={{
             ordenesState: ordenesState,
+            changeOrdenId,
             changeProdMasterRefId,
             changeProdMasterId,
             changeItem,
             changeLavado,
             changemedida,
-            changeFileName
+            changeFileName,
+            changeUserid
         }}>
             {children}
         </OrdenesContext.Provider>

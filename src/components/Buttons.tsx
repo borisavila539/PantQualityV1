@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, TouchableHighlight } from 'react-native'
 import { Text } from 'react-native'
 import { View } from 'react-native'
 import { TouchableOpacity } from 'react-native'
@@ -7,7 +7,7 @@ import { TextButtons } from '../components/Constant'
 import { blue } from '../components/colores'
 import { ButtonsInterface } from '../interfaces/Buttons'
 
-const Buttons = ({ onPressFuntion, disable, title }: ButtonsInterface) => {
+const Buttons = ({ onPressFuntion, disable, title, key }: ButtonsInterface) => {
   return (
     <TouchableOpacity
       style={{ width: '100%', marginBottom: 10 }}
@@ -15,8 +15,9 @@ const Buttons = ({ onPressFuntion, disable, title }: ButtonsInterface) => {
       onPress={onPressFuntion()}
       hitSlop={{ top: 10, bottom: 20, left: 20, right: 20 }}
       disabled={disable}
+      key={key}
     >
-      <View style={styles.button}>
+      <View style={styles.button} >
         <Text style={styles.text}>{title}</Text>
       </View>
     </TouchableOpacity>

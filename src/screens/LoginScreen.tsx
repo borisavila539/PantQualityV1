@@ -1,14 +1,16 @@
-import React, { FC, useState } from 'react'
+import React, { FC, useState, useContext, useEffect } from 'react'
 import { View, StyleSheet, TextInput, Alert, TouchableOpacity, Text, Pressable, ActivityIndicator } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import { TextButtons } from '../components/Constant'
-import { reqResApi } from '../api/reqResApi'
-import { Credencials, Data, LoginInterface, LoginInterfaceFail } from '../interfaces/reqResApi';
+import { reqResApi, reqResApiFinanza } from '../api/reqResApi'
 import { StackScreenProps } from '@react-navigation/stack'
 import { blue, grey, navy, orange } from '../components/colores'
 import MyAlert from '../components/myAlert'
 import { RootStackParams } from '../navigation/Navigation'
+import { usuario } from '../interfaces/reqResApi'
+import { OrdenesContext } from '../context/OrdenesContext'
+
 
 type props = StackScreenProps<RootStackParams, "LoginScreen">;
 
@@ -20,15 +22,18 @@ const LoginScreen: FC<props> = ({ navigation }) => {
   const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
   const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
   const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
+  const { changeUserid } = useContext(OrdenesContext)
 
   const login = async () => {
+
     try {
       setEnviando(true);
-      const data: Credencials = { UserAccount: usuario, Password: contrasena };
-      const request = await reqResApi.post<LoginInterface>('authentication/movil', data);
-
-      if (request.data.Message === 'Ok') {
-        navigation.replace("OrdenesScreen")
+      const request = await reqResApiFinanza.get<usuario[]>('PantsQuality/usuario/' + usuario + '/' + contrasena);
+      if (request.data[0].activo === true) {
+        changeUserid(request.data[0].id)
+        setUsuario("")
+        setContrasena("")
+        navigation.navigate("OrdenesScreen")
       }
 
       setEnviando(false);

@@ -15,16 +15,13 @@ import { MaesterOrdenInterface } from '../interfaces/MasterOrden';
 type props = StackScreenProps<RootStackParams, "LavadoScreen">;
 
 const LavadoScreen: FC<props> = ({ navigation }) => {
-    const { changeLavado, ordenesState, changeFileName } = useContext(OrdenesContext)
-    const [fileName, setFileName] = useState<string>('')
+    const { changeLavado, ordenesState, changeOrdenId } = useContext(OrdenesContext)
 
-    const ConsultarNombreArchivo = async () => {
+    const ObtenerDatosOrden = async () => {
         try {
             const request = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + ordenesState.prodmasterid + '/' + ordenesState.prodMasterRefID + '/' + ordenesState.itemid);
-            if (request.data.length > 0)
-            {
-                changeFileName(request.data[0].filename)
-                setFileName(request.data[0].filename)
+            if (request.data.length > 0) {
+                changeOrdenId(request.data[0].id)
             }
         } catch (err) {
             console.log('no consulto nombre archivo')
@@ -41,9 +38,9 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
         navigation.navigate("TipoMedidaScreen")
     }
 
-    useEffect(() => {
-        ConsultarNombreArchivo();
-    }, [])
+    useEffect(()=>{
+        ObtenerDatosOrden();
+    },[])
 
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
@@ -53,18 +50,6 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
                     <View style={styles.formulario}>
                         <Buttons onPressFuntion={() => onPressAntes} disable={false} title='Antes del Lavado' />
                         <Buttons onPressFuntion={() => onPressDespues} disable={false} title='Despues del lavado' />
-                        <TextInputContainer
-                            title='Nombre Archivo:'
-                            justify={true}
-                            height={ObjectHeigth}
-                            placeholder='Nombre del Archivo xlsx'
-                            teclado={'default'}
-                            multiline={false}
-                            editable={true}
-                            value={fileName}
-                            onChangeText={(value: string) => setFileName(value)}
-                            maxlength={200}
-                        />
                     </View>
                     <Text>
                         {ordenesState.FileName}
