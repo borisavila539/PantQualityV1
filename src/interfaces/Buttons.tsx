@@ -1,6 +1,5 @@
 export interface ButtonsInterface {
-    onPressFuntion: Function,
+    onPress: () => void,
     disable: boolean,
     title: string,
-    key: React.Key
 }

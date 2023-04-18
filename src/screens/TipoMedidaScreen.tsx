@@ -16,7 +16,7 @@ type props = StackScreenProps<RootStackParams, "TipoMedidaScreen">;
 
 const TipoMedidaScreen: FC<props> = ({ navigation }) => {
 
-    const { ordenesState, changemedida } = useContext(OrdenesContext);
+    const { ordenesState, changemedida, changemedidaID, changeTutorialLink } = useContext(OrdenesContext);
     const [Medidas, setMedidas] = useState<MedidasInterface[]>([])
 
     const getMedidas = async () => {
@@ -28,78 +28,11 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
         }
     }
 
-    const irTallas = (nombre: string) => {
-        //changemedida(nombre)
-        console.log('ir tallas')
+    const irTallas = (dato:MedidasInterface) => {
+        changemedida(dato.nombre)
+        changemedidaID(dato.id)
+        changeTutorialLink(dato.link)
         navigation.navigate('MedidasScreen')
-
-    }
-    const irMedidasCinturaAlta = () => {
-        changemedida('Cintura Alta')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasCinturaBaja = () => {
-        changemedida('Cintura Baja')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasCaderaAlta = () => {
-        changemedida('Cadera Alta')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasCaderaBaja = () => {
-        changemedida('Cadera Baja')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasAsiento = () => {
-        changemedida('Asiento')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasTiroDelantero = () => {
-        changemedida('Tiro Delantero')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasMuslo = () => {
-        changemedida('Muslo')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasMusloMedio = () => {
-        changemedida('Muslo Medio')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasRodilla = () => {
-        changemedida('Rodilla')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasPantorrilla = () => {
-        changemedida('Pantorrilla')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasRuedo = () => {
-        changemedida('Ruedo')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const irMedidasEntrepierna = () => {
-        changemedida('Entrepierna')
-        navigation.navigate('MedidasScreen')
-    }
-
-    const renderButton = ()=>{
-        return Medidas.map((medida, index) => {
-            return (
-                <Buttons key={medida.id} onPressFuntion={() => {console.log(medida.nombre)}} disable={false} title={medida.nombre} />
-            )
-        })
     }
 
     useEffect(() => {
@@ -108,32 +41,17 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header />
+            <Header show={true}/>
             <ScrollView style={{ height: '100%', backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>
                         <Text style={styles.text}>{ordenesState.lavado}</Text>
                         {
-                            /*Medidas.map((medida) => {
+                            Medidas.map((medida) => {
                                 return (
-                                    <Buttons key={medida.id} onPressFuntion={() => console.log(medida.nombre)} disable={false} title={medida.nombre} />
+                                    <Buttons key={medida.id} onPress={() => irTallas(medida)} disable={false} title={medida.nombre} />
                                 )
-                            })*/
-                            renderButton()
-                        }
-                        {/*
-                        <Buttons onPressFuntion={() => irMedidasCinturaAlta} disable={false} title='Cintura Alta' />
-                        <Buttons onPressFuntion={() => irMedidasCinturaBaja} disable={false} title='Cintura Baja' />
-                        <Buttons onPressFuntion={() => irMedidasCaderaAlta} disable={false} title='Cadera Alta' />
-                        <Buttons onPressFuntion={() => irMedidasCaderaBaja} disable={false} title='Cadera Baja' />
-                        <Buttons onPressFuntion={() => irMedidasAsiento} disable={false} title='Asiento' />
-                        <Buttons onPressFuntion={() => irMedidasTiroDelantero} disable={false} title='Tiro Delantero' />
-                        <Buttons onPressFuntion={() => irMedidasMuslo} disable={false} title='Muslo' />
-                        <Buttons onPressFuntion={() => irMedidasMusloMedio} disable={false} title='Muslo medio' />
-                        <Buttons onPressFuntion={() => irMedidasRodilla} disable={false} title='Rodilla' />
-                        <Buttons onPressFuntion={() => irMedidasPantorrilla} disable={false} title='Pantorrilla' />
-                        <Buttons onPressFuntion={() => irMedidasRuedo} disable={false} title='Ruedo' />
-                        <Buttons onPressFuntion={() => irMedidasEntrepierna} disable={false} title='Entrepierna' />*/
+                            })
                         }
                     </View>
                 </SafeAreaView>

@@ -8,10 +8,13 @@ export interface OrdenesState {
     prodmasterid: string,
     itemid: string,
     lavado: string,
+    lavadoID: number,
     medida: string,
     medidaId: number,
     FileName: string,
     idUsuario: number,
+    masterID: number,
+    TutorialLink: string
 
 }
 
@@ -25,7 +28,10 @@ export const ordenesInitialState: OrdenesState = {
     FileName: '',
     OrdenId: 0,
     idUsuario: 0,
-    medidaId:0
+    medidaId:0,
+    lavadoID: 0,
+    masterID:0,
+    TutorialLink: ''
 }
 
 export interface OrdenesContextProps {
@@ -35,9 +41,13 @@ export interface OrdenesContextProps {
     changeProdMasterId: (prodMasterId: string) => void;
     changeItem: (item: string) => void;
     changeLavado: (lavado: string) => void;
+    changeLavadoID: (lavadoId: number) => void;
     changemedida: (medida: string) => void;
+    changemedidaID: (medidaid:number) => void;
     changeFileName: (fileName: string) => void;
-    changeUserid: (userid: number) => void
+    changeUserid: (userid: number) => void;
+    changeMasterID: (masterID: number) => void;
+    changeTutorialLink: (TutorialLink: string) => void;
 
 }
 
@@ -65,8 +75,14 @@ export const OrdenesProvider = ({ children }: any) => {
     const changeLavado = (lavado: string) => {
         dispatch({ type: 'changeLavado', payload: lavado })
     }
+    const changeLavadoID = (lavadoID: number) => {
+        dispatch({ type: 'changeLavadoID', payload: lavadoID })
+    }
     const changemedida = (medida: string) => {
         dispatch({ type: 'changeMedida', payload: medida })
+    }
+    const changemedidaID = (medidaID: number) => {
+        dispatch({ type: 'changeMedidaID', payload: medidaID })
     }
     const changeFileName = (fileName: string) => {
         dispatch({ type: 'changeFileName', payload: fileName })
@@ -75,6 +91,13 @@ export const OrdenesProvider = ({ children }: any) => {
     const changeUserid = (userid: number) =>{
         dispatch({type:'changeUserId',payload: userid})
     }
+    const changeMasterID = (masterID: number) =>{
+        dispatch({type: 'changeMasterID',payload: masterID})
+    }
+    const changeTutorialLink = (TutorialLink: string) => {
+        dispatch({type:'changeTutorialLink', payload: TutorialLink})
+    };
+     
 
     return (
         <OrdenesContext.Provider value={{
@@ -84,9 +107,13 @@ export const OrdenesProvider = ({ children }: any) => {
             changeProdMasterId,
             changeItem,
             changeLavado,
+            changeLavadoID,
             changemedida,
+            changemedidaID,
             changeFileName,
-            changeUserid
+            changeUserid,
+            changeMasterID,
+            changeTutorialLink
         }}>
             {children}
         </OrdenesContext.Provider>

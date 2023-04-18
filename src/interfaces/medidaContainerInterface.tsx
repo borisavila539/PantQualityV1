@@ -1,6 +1,6 @@
 export interface MedidaContainerInterface{
     mostrar: boolean;
     medida: string;
-    onChangeText:Function;
+    onChangeText:(value:string)=>void;
     value : string;
 }

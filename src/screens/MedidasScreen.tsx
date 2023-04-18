@@ -1,19 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, Linking } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import { blue, grey } from '../components/colores';
-import TextInputContainer from '../components/TextInputContainer';
-import { ObjectHeigth, TextButtons } from '../components/Constant';
+import {  TextButtons } from '../components/Constant';
 import { OrdenesContext } from '../context/OrdenesContext';
 import Buttons from '../components/Buttons';
 import Header from '../components/Header';
 import { reqResApiFinanza } from '../api/reqResApi';
-import { TallasInterface } from '../interfaces/medidasInterface';
+import { TallasInterface, MedidasEnviarInterface } from '../interfaces/medidasInterface';
 import { MedidaContainer } from '../components/medidaContainer';
+import MyAlert from '../components/myAlert';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParams } from '../navigation/Navigation';
 
 const MedidasScreen = () => {
     const { ordenesState } = useContext(OrdenesContext)
     const [medidas, setMedidas] = useState<TallasInterface[]>()
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
+    const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
+    const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
+    const [enviando, setEnviando] = useState<boolean>(false);
+    const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
+
 
     //Medidas
     const [M01, setM01] = useState<string>('');
@@ -140,22 +149,83 @@ const MedidasScreen = () => {
         }
     }
 
-    const enviarMedidas = () => {
-        console.log('enviar')
+    const enviarMedidas = async() => {
+        setEnviando(true)
+        const medidasEnviar:MedidasEnviarInterface = {
+            id:0,
+            masterID: ordenesState.masterID,
+            lavadoID: ordenesState.lavadoID,
+            medidaId: ordenesState.medidaId,
+            usuario: ordenesState.idUsuario,
+            medida01: M01 != '' ? parseFloat(M01) : 0,
+            medida02: M02 != '' ? parseFloat(M02) : 0,
+            medida03: M03 != '' ? parseFloat(M03) : 0,
+            medida04: M04 != '' ? parseFloat(M04) : 0,
+            medida05: M05 != '' ? parseFloat(M05) : 0,
+            medida06: M06 != '' ? parseFloat(M06) : 0,
+            medida07: M07 != '' ? parseFloat(M07) : 0,
+            medida08: M08 != '' ? parseFloat(M08) : 0,
+            medida09: M09 != '' ? parseFloat(M09) : 0,
+            medida10: M10 != '' ? parseFloat(M10) : 0,
+            medida11: M11 != '' ? parseFloat(M11) : 0,
+            medida12: M12 != '' ? parseFloat(M12) : 0,
+            medida13: M13 != '' ? parseFloat(M13) : 0,
+            medida14: M14 != '' ? parseFloat(M14) : 0,
+            medida15: M15 != '' ? parseFloat(M15) : 0,
+            medida16: M16 != '' ? parseFloat(M16) : 0,
+            medida17: M17 != '' ? parseFloat(M17) : 0,
+            medida18: M18 != '' ? parseFloat(M18) : 0,
+            medida19: M19 != '' ? parseFloat(M19) : 0,
+            medida20: M20 != '' ? parseFloat(M20) : 0,
+        }
+        
+        try{
+            const request = await reqResApiFinanza.post<MedidasEnviarInterface[]>('PantsQuality/medidasInsert',medidasEnviar);
+            //console.log(request.data[0])
+            if( request.data[0].usuario > 0)
+            {
+                setMensajeAlerta('Enviado')
+                setTipoMensaje(true);
+                setShowMensajeAlerta(true);
+                
+            }
+        }catch(err){
+            setMensajeAlerta('No Enviado')
+            setTipoMensaje(false);
+            setShowMensajeAlerta(true);
+        }
+        setEnviando(false)
+    }
+
+    const irVideoTutorial = async() =>{
+        if(ordenesState.TutorialLink.length > 0){
+            Linking.openURL(ordenesState.TutorialLink)
+        }else{
+            setMensajeAlerta('No hay Tutorial')
+            setTipoMensaje(false);
+            setShowMensajeAlerta(true);
+        }
     }
 
     useEffect(() => {
         getMedidas()
     }, [])
 
+    useEffect(()=>{
+        if(mensajeAlerta == 'Enviado' && !showMensajeAlerta){
+            navigation.goBack();
+        }
+    },[showMensajeAlerta])
+
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header />
+            <Header show={true}/>
             <ScrollView style={{ height: '100%', backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>
                         <Text style={styles.text}>{ordenesState.lavado}</Text>
                         <Text style={styles.text}>{ordenesState.medida}</Text>
+                        <Buttons onPress={irVideoTutorial} disable={enviando} title='Video Ayuda' />
 
                         <MedidaContainer mostrar={T01} medida={s01} onChangeText={(value: string) => setM01(value)} value={M01} />
                         <MedidaContainer mostrar={T02} medida={s02} onChangeText={(value: string) => setM02(value)} value={M02} />
@@ -178,10 +248,11 @@ const MedidasScreen = () => {
                         <MedidaContainer mostrar={T19} medida={s19} onChangeText={(value: string) => setM19(value)} value={M19} />
                         <MedidaContainer mostrar={T20} medida={s20} onChangeText={(value: string) => setM20(value)} value={M20} />
 
-                        <Buttons key={0} onPressFuntion={() => enviarMedidas} disable={false} title='Enviar' />
+                        <Buttons onPress={enviarMedidas} disable={enviando} title='Enviar' />
                     </View>
                 </SafeAreaView>
             </ScrollView>
+            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)}/>
         </View>
     )
 }

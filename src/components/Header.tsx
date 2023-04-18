@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, FC } from 'react'
 import { Pressable, StyleSheet, Text } from 'react-native'
 import { View } from 'react-native'
 import { OrdenesContext } from '../context/OrdenesContext'
@@ -8,8 +8,10 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackParams } from '../navigation/Navigation'
 import { StackNavigationProp } from '@react-navigation/stack'
-
-const Header = () => {
+interface headerInterface{
+    show: boolean
+}
+const Header:FC<headerInterface> = ({show}) => {
     const { ordenesState } = useContext(OrdenesContext);
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
 
@@ -19,6 +21,7 @@ const Header = () => {
         }
     }
 
+
     return (
         <View style={styles.header}>
             <Pressable onPress={navigateBack}>
@@ -26,7 +29,10 @@ const Header = () => {
                     <Icon name='arrow-back-sharp' size={20} color={grey} />
                 </Text>
             </Pressable>
-            <Text style={styles.text}>{ordenesState.prodMasterRefID}</Text>
+            {
+                show &&
+                <Text style={styles.text}>{ordenesState.prodMasterRefID}</Text>
+            }
         </View>
     )
 }

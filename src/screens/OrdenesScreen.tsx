@@ -8,6 +8,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { FontFamily, IconHeader, TextButtons } from '../components/Constant';
 import { RootStackParams } from '../navigation/Navigation';
+import Header from '../components/Header';
 
 type props = StackScreenProps<RootStackParams, "OrdenesScreen">;
 
@@ -91,6 +92,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   }, [])
   return (
     <View style={styles.container}>
+      <Header show={false}/>
       <View style={styles.containerBuscar}>
         <Text style={styles.text}>Buscar:</Text>
         <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center' }}>
@@ -173,6 +175,8 @@ const styles = StyleSheet.create({
     width: '90%',
     marginHorizontal: '1%',
     marginVertical: 2,
+    paddingHorizontal: 5,
+
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'

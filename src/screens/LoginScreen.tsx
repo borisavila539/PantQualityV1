@@ -1,5 +1,5 @@
 import React, { FC, useState, useContext, useEffect } from 'react'
-import { View, StyleSheet, TextInput, Alert, TouchableOpacity, Text, Pressable, ActivityIndicator } from 'react-native'
+import { View, StyleSheet, TextInput, Alert, TouchableOpacity, Text, Pressable, ActivityIndicator, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import { TextButtons } from '../components/Constant'
@@ -52,7 +52,10 @@ const LoginScreen: FC<props> = ({ navigation }) => {
     <View style={{ flex: 1, position: 'relative' }}>
       <View style={styles.container}>
         <View style={styles.containerImage}>
-          <Text style={{ color: navy }}>Imagen</Text>
+          <Image
+            source={require('../assets/ImageLogin.png')}
+            style={styles.imagen}
+          />
         </View>
         <View style={styles.containerInputs}>
           <View style={styles.textInputAlign}>
@@ -184,6 +187,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: 'sans-serif'
   },
+  imagen: {
+    width: '100%',
+    height: '80%',
+    resizeMode: 'contain',
+    marginBottom: 20
+  }
 })
 
 export default LoginScreen;

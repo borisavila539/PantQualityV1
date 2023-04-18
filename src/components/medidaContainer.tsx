@@ -16,7 +16,7 @@ export const MedidaContainer = ({ mostrar, medida, onChangeText, value }: Medida
                     teclado={'decimal-pad'}
                     multiline={false}
                     editable={true}
-                    onChangeText={() => onChangeText()}
+                    onChangeText={(value:string) => onChangeText(value)}
                     value={value}
                     maxlength={20}
                 />

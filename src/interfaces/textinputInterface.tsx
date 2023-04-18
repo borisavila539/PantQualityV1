@@ -6,7 +6,7 @@ export interface TextInputInterface {
     teclado: any,
     multiline: boolean,
     editable: boolean,
-    onChangeText: Function,
+    onChangeText: (value:string) => void,
     value: string,
     maxlength: number
 }

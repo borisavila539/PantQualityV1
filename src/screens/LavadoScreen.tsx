@@ -15,13 +15,14 @@ import { MaesterOrdenInterface } from '../interfaces/MasterOrden';
 type props = StackScreenProps<RootStackParams, "LavadoScreen">;
 
 const LavadoScreen: FC<props> = ({ navigation }) => {
-    const { changeLavado, ordenesState, changeOrdenId } = useContext(OrdenesContext)
+    const { changeLavado, ordenesState, changeOrdenId, changeLavadoID, changeMasterID } = useContext(OrdenesContext)
 
     const ObtenerDatosOrden = async () => {
         try {
             const request = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + ordenesState.prodmasterid + '/' + ordenesState.prodMasterRefID + '/' + ordenesState.itemid);
             if (request.data.length > 0) {
                 changeOrdenId(request.data[0].id)
+                changeMasterID(request.data[0].id)
             }
         } catch (err) {
             console.log('no consulto nombre archivo')
@@ -30,11 +31,13 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
 
     const onPressAntes = () => {
         changeLavado('Antes del Lavado')
+        changeLavadoID(0);
         navigation.navigate("TipoMedidaScreen")
     }
 
     const onPressDespues = () => {
         changeLavado('Despues del Lavado')
+        changeLavadoID(1)
         navigation.navigate("TipoMedidaScreen")
     }
 
@@ -44,12 +47,12 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header />
+            <Header show={true}/>
             <ScrollView style={{ height: '100%', backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>
-                        <Buttons onPressFuntion={() => onPressAntes} disable={false} title='Antes del Lavado' />
-                        <Buttons onPressFuntion={() => onPressDespues} disable={false} title='Despues del lavado' />
+                        <Buttons onPress={onPressAntes} disable={false} title='Antes del Lavado' />
+                        <Buttons onPress={onPressDespues} disable={false} title='Despues del lavado' />
                     </View>
                     <Text>
                         {ordenesState.FileName}
