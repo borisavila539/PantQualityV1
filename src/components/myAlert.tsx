@@ -1,6 +1,6 @@
 import { Modal, Pressable, StyleSheet, Text, View, } from 'react-native';
 import { myAlertInterface } from "../interfaces/alert";
-import { grey } from './colores';
+import { grey, navy } from './colores';
 import Icon from 'react-native-vector-icons/Ionicons'
 
 import { FontFamily, TextoPantallas } from './Constant';
@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
         fontSize: TextoPantallas,
         fontWeight: 'bold',
         marginTop: 10,
-        fontFamily: FontFamily
+        fontFamily: FontFamily,
+        color: navy
     },
     pressable: {
         backgroundColor: '#0078AA',

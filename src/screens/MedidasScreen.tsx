@@ -225,7 +225,7 @@ const MedidasScreen = () => {
                     <View style={styles.formulario}>
                         <Text style={styles.text}>{ordenesState.lavado}</Text>
                         <Text style={styles.text}>{ordenesState.medida}</Text>
-                        <Buttons onPress={irVideoTutorial} disable={enviando} title='Video Ayuda' />
+                        <Buttons onPress={irVideoTutorial} disable={false} title='Video Ayuda' />
 
                         <MedidaContainer mostrar={T01} medida={s01} onChangeText={(value: string) => setM01(value)} value={M01} />
                         <MedidaContainer mostrar={T02} medida={s02} onChangeText={(value: string) => setM02(value)} value={M02} />
@@ -247,8 +247,7 @@ const MedidasScreen = () => {
                         <MedidaContainer mostrar={T18} medida={s18} onChangeText={(value: string) => setM18(value)} value={M18} />
                         <MedidaContainer mostrar={T19} medida={s19} onChangeText={(value: string) => setM19(value)} value={M19} />
                         <MedidaContainer mostrar={T20} medida={s20} onChangeText={(value: string) => setM20(value)} value={M20} />
-
-                        <Buttons onPress={enviarMedidas} disable={enviando} title='Enviar' />
+                            <Buttons onPress={enviarMedidas} disable={enviando} title='Enviar' />
                     </View>
                 </SafeAreaView>
             </ScrollView>

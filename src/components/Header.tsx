@@ -24,7 +24,7 @@ const Header:FC<headerInterface> = ({show}) => {
 
     return (
         <View style={styles.header}>
-            <Pressable onPress={navigateBack}>
+            <Pressable onPress={navigateBack} style={{width: '20%', maxWidth: 50, padding: 5}}>
                 <Text>
                     <Icon name='arrow-back-sharp' size={20} color={grey} />
                 </Text>

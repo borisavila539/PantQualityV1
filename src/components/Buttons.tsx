@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { StyleSheet, TouchableHighlight } from 'react-native'
+import { ActivityIndicator, StyleSheet, TouchableHighlight } from 'react-native'
 import { Text } from 'react-native'
 import { View } from 'react-native'
 import { TouchableOpacity } from 'react-native'
@@ -10,7 +10,7 @@ import { ButtonsInterface } from '../interfaces/Buttons'
 const Buttons: FC<ButtonsInterface> = ({ onPress, disable, title }) => {
   return (
     <TouchableOpacity
-      style={{ width: '100%', marginBottom: 10 }}
+      style={{ width: '100%', marginBottom: 10, maxWidth: 450 }}
       activeOpacity={0.5}
       onPress={onPress}
       hitSlop={{ top: 10, bottom: 20, left: 20, right: 20 }}
@@ -18,7 +18,13 @@ const Buttons: FC<ButtonsInterface> = ({ onPress, disable, title }) => {
 
     >
       <View style={styles.button} >
-        <Text style={styles.text}>{title}</Text>
+        {
+          !disable ?
+          <Text style={styles.text}>{title}</Text>
+          :
+          <ActivityIndicator color="#FFF" />
+          
+        }
       </View>
     </TouchableOpacity>
   )

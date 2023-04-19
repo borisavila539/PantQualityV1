@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
         fontFamily: FontFamily
     },
     textInput: {
+        maxWidth: 450,
         width: '100%',
         padding: 5
     },

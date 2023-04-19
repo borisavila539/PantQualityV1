@@ -66,25 +66,28 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
 
 
   const renderItem = (item: OrdennesIniciadasInterface) => {
-    const onPressOrden =(item2: OrdennesIniciadasInterface) =>{
+    const onPressOrden = (item2: OrdennesIniciadasInterface) => {
       //Enviar a la base de datos
       onPress(item2)
     }
     return (
-      <View style={styles.containerRenderItem}>
-        <TouchableOpacity style={styles.renderItemTouch} onPress={() => onPressOrden(item)}>
-          <View style={styles.containerIcon}>
-            <Text>
-              <Icon name='document-text-sharp' size={IconHeader} color={navy} />
-            </Text>
-          </View>
-          <View style={{ width: '80%' }}>
-            <Text style={styles.text}>Orden: {item.prodmasterrefid}</Text>
-            <Text style={styles.text}>Articulo: {item.itemid}</Text>
+      <View style={{width: '100%', alignItems: 'center'}}>
+        <View style={styles.containerRenderItem}>
+          <TouchableOpacity style={styles.renderItemTouch} onPress={() => onPressOrden(item)}>
+            <View style={styles.containerIcon}>
+              <Text>
+                <Icon name='document-text-sharp' size={IconHeader} color={navy} />
+              </Text>
+            </View>
+            <View style={{ width: '80%' }}>
+              <Text style={styles.text}>Orden: {item.prodmasterrefid}</Text>
+              <Text style={styles.text}>Articulo: {item.itemid}</Text>
 
-          </View>
-        </TouchableOpacity>
+            </View>
+          </TouchableOpacity>
+        </View>
       </View>
+
     )
   }
   useEffect(() => {
@@ -92,7 +95,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   }, [])
   return (
     <View style={styles.container}>
-      <Header show={false}/>
+      <Header show={false} />
       <View style={styles.containerBuscar}>
         <Text style={styles.text}>Buscar:</Text>
         <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center' }}>
@@ -138,7 +141,8 @@ const styles = StyleSheet.create({
     backgroundColor: grey
   },
   containerRenderItem: {
-    width: '95%',
+    maxWidth: 450,
+    width: '90%',
     borderWidth: 1.5,
     flexDirection: 'row',
     paddingHorizontal: 10,
