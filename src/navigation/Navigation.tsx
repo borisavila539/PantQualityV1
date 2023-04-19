@@ -1,12 +1,10 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import LoginScreen from '../screens/LoginScreen';
 import OrdenesScreen from '../screens/OrdenesScreen';
 import MedidasScreen from '../screens/MedidasScreen';
 import TipoMedidaScreen from '../screens/TipoMedidaScreen';
 import LavadoScreen from '../screens/LavadoScreen';
-
 
 export type RootStackParams = {
     LoginScreen: undefined,

@@ -70,12 +70,12 @@ export const OrdenesReducer = (state: OrdenesState, action: OrdenesAction): Orde
                 FileName: action.payload
             }
         case "changeMasterID":
-            return{
+            return {
                 ...state,
-                masterID : action.payload
+                masterID: action.payload
             }
         case "changeTutorialLink":
-            return{
+            return {
                 ...state,
                 TutorialLink: action.payload
             }

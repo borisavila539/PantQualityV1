@@ -1,12 +1,5 @@
 import axios from "axios";
-import { APIFinanzas, APILogin } from "../components/Constant";
-
-export const reqResApi = axios.create({
-    baseURL: APILogin,
-    headers: {
-        "Content-type": "application/json"
-      }
-});
+import { APIFinanzas } from "../components/Constant";
 
 export const reqResApiFinanza = axios.create({
   baseURL: APIFinanzas

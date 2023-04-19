@@ -21,7 +21,7 @@ const TextInputContainer = ({ title, justify, height, placeholder, teclado, mult
                 keyboardType={teclado}
                 multiline={multiline}
                 editable={editable}
-                onChangeText={(value:string)=> onChangeText(value)}
+                onChangeText={(value: string) => onChangeText(value)}
                 value={value}
                 maxLength={maxlength}
             />

@@ -1,11 +1,10 @@
 import React, { FC, useState, useContext, useEffect } from 'react'
 import { View, StyleSheet, TextInput, Alert, TouchableOpacity, Text, Pressable, ActivityIndicator, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-
 import { TextButtons } from '../components/Constant'
-import { reqResApi, reqResApiFinanza } from '../api/reqResApi'
+import { reqResApiFinanza } from '../api/reqResApi'
 import { StackScreenProps } from '@react-navigation/stack'
-import { blue, grey, navy, orange } from '../components/colores'
+import { blue, grey, orange } from '../components/colores'
 import MyAlert from '../components/myAlert'
 import { RootStackParams } from '../navigation/Navigation'
 import { usuario } from '../interfaces/reqResApi'
@@ -25,7 +24,6 @@ const LoginScreen: FC<props> = ({ navigation }) => {
   const { changeUserid } = useContext(OrdenesContext)
 
   const login = async () => {
-
     try {
       setEnviando(true);
       const request = await reqResApiFinanza.get<usuario[]>('PantsQuality/usuario/' + usuario + '/' + contrasena);
@@ -35,17 +33,13 @@ const LoginScreen: FC<props> = ({ navigation }) => {
         setContrasena("")
         navigation.navigate("OrdenesScreen")
       }
-
       setEnviando(false);
     } catch (err) {
-
       setMensajeAlerta('Usuario o contraseña incorrecta...')
       setTipoMensaje(false);
       setShowMensajeAlerta(true);
       setEnviando(false);
-
     }
-
   }
 
   return (
@@ -87,9 +81,6 @@ const LoginScreen: FC<props> = ({ navigation }) => {
                 <Icon name={viewPassword ? 'eye' : 'eye-off'} size={20} color={grey} />
               </Text>
             </Pressable>
-
-
-
           </View>
           <View style={{ width: '100%', marginTop: 10, alignItems: 'center' }}>
             <TouchableOpacity
@@ -110,7 +101,6 @@ const LoginScreen: FC<props> = ({ navigation }) => {
             </TouchableOpacity>
           </View>
         </View>
-
       </View>
       <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
     </View>

@@ -16,13 +16,11 @@ import { RootStackParams } from '../navigation/Navigation';
 
 const MedidasScreen = () => {
     const { ordenesState } = useContext(OrdenesContext)
-    const [medidas, setMedidas] = useState<TallasInterface[]>()
     const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
     const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
     const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
     const [enviando, setEnviando] = useState<boolean>(false);
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
-
 
     //Medidas
     const [M01, setM01] = useState<string>('');
@@ -93,7 +91,6 @@ const MedidasScreen = () => {
         try {
             let size: number;
             const request = await reqResApiFinanza.get<TallasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid);
-            setMedidas(request.data)
             size = request.data.length;
 
             //Mostrar Medidas bool
@@ -181,16 +178,14 @@ const MedidasScreen = () => {
         
         try{
             const request = await reqResApiFinanza.post<MedidasEnviarInterface[]>('PantsQuality/medidasInsert',medidasEnviar);
-            //console.log(request.data[0])
             if( request.data[0].usuario > 0)
             {
                 setMensajeAlerta('Enviado')
                 setTipoMensaje(true);
-                setShowMensajeAlerta(true);
-                
+                setShowMensajeAlerta(true);                
             }
         }catch(err){
-            setMensajeAlerta('No Enviado')
+            setMensajeAlerta('No Se encontro el archivo de excel')
             setTipoMensaje(false);
             setShowMensajeAlerta(true);
         }
@@ -247,7 +242,8 @@ const MedidasScreen = () => {
                         <MedidaContainer mostrar={T18} medida={s18} onChangeText={(value: string) => setM18(value)} value={M18} />
                         <MedidaContainer mostrar={T19} medida={s19} onChangeText={(value: string) => setM19(value)} value={M19} />
                         <MedidaContainer mostrar={T20} medida={s20} onChangeText={(value: string) => setM20(value)} value={M20} />
-                            <Buttons onPress={enviarMedidas} disable={enviando} title='Enviar' />
+                        
+                        <Buttons onPress={enviarMedidas} disable={enviando} title='Enviar' />
                     </View>
                 </SafeAreaView>
             </ScrollView>

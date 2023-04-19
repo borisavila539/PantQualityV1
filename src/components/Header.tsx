@@ -8,10 +8,12 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackParams } from '../navigation/Navigation'
 import { StackNavigationProp } from '@react-navigation/stack'
-interface headerInterface{
+
+interface headerInterface {
     show: boolean
 }
-const Header:FC<headerInterface> = ({show}) => {
+
+const Header: FC<headerInterface> = ({ show }) => {
     const { ordenesState } = useContext(OrdenesContext);
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
 
@@ -20,11 +22,9 @@ const Header:FC<headerInterface> = ({show}) => {
             navigation.goBack();
         }
     }
-
-
     return (
         <View style={styles.header}>
-            <Pressable onPress={navigateBack} style={{width: '20%', maxWidth: 50, padding: 5}}>
+            <Pressable onPress={navigateBack} style={{ width: '20%', maxWidth: 50, padding: 5 }}>
                 <Text>
                     <Icon name='arrow-back-sharp' size={20} color={grey} />
                 </Text>
@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
     header: {
         width: '100%',
         height: '8%',
+        maxHeight: 55,
         alignItems: "center",
         flexDirection: 'row',
         backgroundColor: navy,

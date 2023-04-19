@@ -28,7 +28,7 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
         }
     }
 
-    const irTallas = (dato:MedidasInterface) => {
+    const irTallas = (dato: MedidasInterface) => {
         changemedida(dato.nombre)
         changemedidaID(dato.id)
         changeTutorialLink(dato.link)
@@ -41,7 +41,7 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header show={true}/>
+            <Header show={true} />
             <ScrollView style={{ height: '100%', backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>

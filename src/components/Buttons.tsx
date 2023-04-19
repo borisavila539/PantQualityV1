@@ -1,5 +1,5 @@
 import React, { FC } from 'react'
-import { ActivityIndicator, StyleSheet, TouchableHighlight } from 'react-native'
+import { ActivityIndicator, StyleSheet } from 'react-native'
 import { Text } from 'react-native'
 import { View } from 'react-native'
 import { TouchableOpacity } from 'react-native'

@@ -1,4 +1,3 @@
-
 export interface usuario {
     id: number,
     usuario: string,

@@ -52,9 +52,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
       }
       setCargando(false)
     }
-
   }
-
 
   const onPress = (item: OrdennesIniciadasInterface) => {
     changeProdMasterRefId(item.prodmasterrefid);
@@ -67,11 +65,10 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
 
   const renderItem = (item: OrdennesIniciadasInterface) => {
     const onPressOrden = (item2: OrdennesIniciadasInterface) => {
-      //Enviar a la base de datos
       onPress(item2)
     }
     return (
-      <View style={{width: '100%', alignItems: 'center'}}>
+      <View style={{ width: '100%', alignItems: 'center' }}>
         <View style={styles.containerRenderItem}>
           <TouchableOpacity style={styles.renderItemTouch} onPress={() => onPressOrden(item)}>
             <View style={styles.containerIcon}>
@@ -82,12 +79,10 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
             <View style={{ width: '80%' }}>
               <Text style={styles.text}>Orden: {item.prodmasterrefid}</Text>
               <Text style={styles.text}>Articulo: {item.itemid}</Text>
-
             </View>
           </TouchableOpacity>
         </View>
       </View>
-
     )
   }
   useEffect(() => {
@@ -96,21 +91,24 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header show={false} />
-      <View style={styles.containerBuscar}>
-        <Text style={styles.text}>Buscar:</Text>
-        <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center' }}>
-          <TextInput
-            style={styles.input}
-            placeholder='OP-00000000'
-            placeholderTextColor={'#DAE1E7'}
-            onChangeText={(value) => setFiltro(value)}
-            value={Filtro}
-          />
-          <TouchableOpacity onPress={getOrdenesIniciadas}>
-            <Text>
-              <Icon name='search-sharp' size={30} color={navy} />
-            </Text>
-          </TouchableOpacity>
+      <View style={{ width: '100%', alignItems: 'center' }}>
+
+        <View style={styles.containerBuscar}>
+          <Text style={styles.text}>Buscar:</Text>
+          <View style={{ width: '90%', flexDirection: 'row', alignItems: 'center' }}>
+            <TextInput
+              style={styles.input}
+              placeholder='OP-00000000'
+              placeholderTextColor={'#DAE1E7'}
+              onChangeText={(value) => setFiltro(value)}
+              value={Filtro}
+            />
+            <TouchableOpacity onPress={getOrdenesIniciadas}>
+              <Text>
+                <Icon name='search-sharp' size={30} color={navy} />
+              </Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       {
@@ -173,9 +171,11 @@ const styles = StyleSheet.create({
     backgroundColor: grey,
     fontSize: TextButtons,
     textAlign: 'center',
-    width: '90%'
+    width: '90%',
+    color: navy
   },
   containerBuscar: {
+    maxWidth: 450,
     width: '90%',
     marginHorizontal: '1%',
     marginVertical: 2,

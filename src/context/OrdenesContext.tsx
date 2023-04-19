@@ -28,22 +28,22 @@ export const ordenesInitialState: OrdenesState = {
     FileName: '',
     OrdenId: 0,
     idUsuario: 0,
-    medidaId:0,
+    medidaId: 0,
     lavadoID: 0,
-    masterID:0,
+    masterID: 0,
     TutorialLink: ''
 }
 
 export interface OrdenesContextProps {
     ordenesState: OrdenesState;
-    changeOrdenId: (ordenId:number) => void;
+    changeOrdenId: (ordenId: number) => void;
     changeProdMasterRefId: (prodMasterRefID: string) => void;
     changeProdMasterId: (prodMasterId: string) => void;
     changeItem: (item: string) => void;
     changeLavado: (lavado: string) => void;
     changeLavadoID: (lavadoId: number) => void;
     changemedida: (medida: string) => void;
-    changemedidaID: (medidaid:number) => void;
+    changemedidaID: (medidaid: number) => void;
     changeFileName: (fileName: string) => void;
     changeUserid: (userid: number) => void;
     changeMasterID: (masterID: number) => void;
@@ -57,8 +57,8 @@ export const OrdenesContext = createContext({} as OrdenesContextProps)
 export const OrdenesProvider = ({ children }: any) => {
     const [ordenesState, dispatch] = useReducer(OrdenesReducer, ordenesInitialState)
 
-    const changeOrdenId = (ordenId: number) =>{
-        dispatch({type: 'changeOrdenId', payload: ordenId})
+    const changeOrdenId = (ordenId: number) => {
+        dispatch({ type: 'changeOrdenId', payload: ordenId })
     }
     const changeProdMasterRefId = (prodMasterRefID: string) => {
         dispatch({ type: 'changeProdMasterRefId', payload: prodMasterRefID })
@@ -88,16 +88,16 @@ export const OrdenesProvider = ({ children }: any) => {
         dispatch({ type: 'changeFileName', payload: fileName })
     }
 
-    const changeUserid = (userid: number) =>{
-        dispatch({type:'changeUserId',payload: userid})
+    const changeUserid = (userid: number) => {
+        dispatch({ type: 'changeUserId', payload: userid })
     }
-    const changeMasterID = (masterID: number) =>{
-        dispatch({type: 'changeMasterID',payload: masterID})
+    const changeMasterID = (masterID: number) => {
+        dispatch({ type: 'changeMasterID', payload: masterID })
     }
     const changeTutorialLink = (TutorialLink: string) => {
-        dispatch({type:'changeTutorialLink', payload: TutorialLink})
+        dispatch({ type: 'changeTutorialLink', payload: TutorialLink })
     };
-     
+
 
     return (
         <OrdenesContext.Provider value={{

@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState, useEffect } from 'react'
+import React, { FC, useContext, useEffect } from 'react'
 import { SafeAreaView, View, StyleSheet, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler'
 import { grey } from '../components/colores';
@@ -7,8 +7,6 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { OrdenesContext } from '../context/OrdenesContext';
 import Header from '../components/Header';
 import { RootStackParams } from '../navigation/Navigation';
-import TextInputContainer from '../components/TextInputContainer';
-import { ObjectHeigth } from '../components/Constant';
 import { reqResApiFinanza } from '../api/reqResApi';
 import { MaesterOrdenInterface } from '../interfaces/MasterOrden';
 
@@ -41,13 +39,13 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
         navigation.navigate("TipoMedidaScreen")
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         ObtenerDatosOrden();
-    },[])
+    }, [])
 
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header show={true}/>
+            <Header show={true} />
             <ScrollView style={{ height: '100%', backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>

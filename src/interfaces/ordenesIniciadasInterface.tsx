@@ -3,4 +3,4 @@ export interface OrdennesIniciadasInterface {
     prodmasterid: string;
     itemid: string;
     loweststatus: string;
-};
+}

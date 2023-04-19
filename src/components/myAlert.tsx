@@ -2,9 +2,7 @@ import { Modal, Pressable, StyleSheet, Text, View, } from 'react-native';
 import { myAlertInterface } from "../interfaces/alert";
 import { grey, navy } from './colores';
 import Icon from 'react-native-vector-icons/Ionicons'
-
 import { FontFamily, TextoPantallas } from './Constant';
-
 
 function MyAlert({ visible, tipoMensaje, mensajeAlerta, onPress }: myAlertInterface) {
     return (
@@ -12,7 +10,7 @@ function MyAlert({ visible, tipoMensaje, mensajeAlerta, onPress }: myAlertInterf
             <View style={styles.modal}>
                 <View style={styles.constainer}>
                     <Text>
-                        <Icon name={tipoMensaje ? 'checkmark-sharp' : 'alert-circle-outline'} size={80} color={tipoMensaje ? 'green' : 'orange'} />
+                        <Icon name={tipoMensaje ? 'cloud-done-outline' : 'cloud-offline-outline'} size={80} color={tipoMensaje ? 'green' : '#E14D2A'} />
                     </Text>
                     <Text style={styles.text}>
                         {mensajeAlerta}
