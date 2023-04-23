@@ -10,6 +10,7 @@ import { RootStackParams } from '../navigation/Navigation';
 import { reqResApiFinanza } from '../api/reqResApi';
 import { MaesterOrdenInterface } from '../interfaces/MasterOrden';
 import MyAlert from '../components/myAlert';
+import MyAlertValidate from '../components/MyAlertValidate';
 
 type props = StackScreenProps<RootStackParams, "LavadoScreen">;
 
@@ -63,7 +64,7 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
             setShowMensajeAlerta(true);
         }
         setEnviando(false);
-
+        setShowMensajeAlerta(false)
     }
 
     useEffect(() => {
@@ -78,15 +79,14 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
                     <View style={styles.formulario}>
                         <Buttons onPress={onPressAntes} disable={false} title='Antes del Lavado' />
                         <Buttons onPress={onPressDespues} disable={false} title='Despues del lavado' />
-                        <Buttons onPress={Cerrarorden} disable={enviando} title='Cerrar Orden' />
+                        <Buttons onPress={()=>setShowMensajeAlerta(true)} disable={enviando} title='Cerrar Orden' />
                     </View>
                     <Text>
                         {ordenesState.FileName}
                     </Text>
                 </SafeAreaView>
             </ScrollView>
-            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
-
+        <MyAlertValidate visible={showMensajeAlerta} tipoMensaje={true} mensajeAlerta={'¿Desea Cerrar la orden?'} onPress={Cerrarorden} onPressCancel={()=>setShowMensajeAlerta(false)}/>
         </View>
     )
 }
