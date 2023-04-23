@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect } from 'react'
+import React, { FC, useContext, useEffect, useState } from 'react'
 import { SafeAreaView, View, StyleSheet, Text } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler'
 import { grey } from '../components/colores';
@@ -9,11 +9,16 @@ import Header from '../components/Header';
 import { RootStackParams } from '../navigation/Navigation';
 import { reqResApiFinanza } from '../api/reqResApi';
 import { MaesterOrdenInterface } from '../interfaces/MasterOrden';
+import MyAlert from '../components/myAlert';
 
 type props = StackScreenProps<RootStackParams, "LavadoScreen">;
 
 const LavadoScreen: FC<props> = ({ navigation }) => {
     const { changeLavado, ordenesState, changeOrdenId, changeLavadoID, changeMasterID } = useContext(OrdenesContext)
+    const [enviando, setEnviando] = useState<boolean>(false);
+    const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
+    const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
+    const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
 
     const ObtenerDatosOrden = async () => {
         try {
@@ -39,6 +44,28 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
         navigation.navigate("TipoMedidaScreen")
     }
 
+    const Cerrarorden = async () => {
+        setEnviando(true);
+
+        try {
+            const request = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/CerrarOrden/' + ordenesState.OrdenId + '/' + ordenesState.idUsuario);
+            if (request.data[0].posted == true) {
+                changeOrdenId(0)
+                navigation.goBack();
+            } else {
+                setMensajeAlerta('No se puedo actualizar el estado de la orden')
+                setTipoMensaje(false);
+                setShowMensajeAlerta(true);
+            }
+        } catch (err) {
+            setMensajeAlerta('No se puedo actualizar el estado de la orden')
+            setTipoMensaje(false);
+            setShowMensajeAlerta(true);
+        }
+        setEnviando(false);
+
+    }
+
     useEffect(() => {
         ObtenerDatosOrden();
     }, [])
@@ -51,12 +78,15 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
                     <View style={styles.formulario}>
                         <Buttons onPress={onPressAntes} disable={false} title='Antes del Lavado' />
                         <Buttons onPress={onPressDespues} disable={false} title='Despues del lavado' />
+                        <Buttons onPress={Cerrarorden} disable={enviando} title='Cerrar Orden' />
                     </View>
                     <Text>
                         {ordenesState.FileName}
                     </Text>
                 </SafeAreaView>
             </ScrollView>
+            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
+
         </View>
     )
 }

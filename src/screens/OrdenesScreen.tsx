@@ -2,22 +2,23 @@ import React, { useEffect, useState, useContext, FC } from 'react'
 import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator, TouchableOpacity, TextInput } from 'react-native';
 import { reqResApiFinanza } from '../api/reqResApi'
 import { OrdennesIniciadasInterface } from '../interfaces/ordenesIniciadasInterface';
-import { grey, navy, orange } from '../components/colores';
-import { OrdenesContext } from '../context/OrdenesContext';
+import { blue, grey, navy, orange } from '../components/colores';
+import { OrdenesContext, ordenesInitialState } from '../context/OrdenesContext';
 import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { FontFamily, IconHeader, TextButtons } from '../components/Constant';
 import { RootStackParams } from '../navigation/Navigation';
 import Header from '../components/Header';
+import { MaesterOrdenInterface } from '../interfaces/MasterOrden';
 
 type props = StackScreenProps<RootStackParams, "OrdenesScreen">;
 
 
 const OrdenesScreen: FC<props> = ({ navigation }) => {
-  const [ordenes, setOrdenes] = useState<OrdennesIniciadasInterface[]>([])
-  const [ordenesShow, setOrdenesShow] = useState<OrdennesIniciadasInterface[]>([])
+  const [ordenes, setOrdenes] = useState<MaesterOrdenInterface[]>([])
+  const [ordenesShow, setOrdenesShow] = useState<MaesterOrdenInterface[]>([])
 
-  const { changeProdMasterRefId, changeProdMasterId, changeItem } = useContext(OrdenesContext)
+  const { ordenesState,changeProdMasterRefId, changeProdMasterId, changeItem } = useContext(OrdenesContext)
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [Filtro, setFiltro] = useState<string>('');
   const [page, setPage] = useState<number>(0);
@@ -26,13 +27,23 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   const getOrdenesIniciadas = async () => {
     if (!cargando) {
       setCargando(true)
+
       try {
+        let estadoOrden: MaesterOrdenInterface[] = [];
         const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/0/15/' + (Filtro != '' ? Filtro : '-'));
-        setOrdenes(request.data);
-        setOrdenesShow(request.data)
+        let size: number = request.data.length;
+        request.data.map(async (x) => {
+          const request2 = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + x.prodmasterid + '/' + x.prodmasterrefid + '/' + x.itemid);
+          let req: MaesterOrdenInterface = request2.data[0]
+          estadoOrden = [...estadoOrden, req]
+          if (estadoOrden.length === size) {
+            setOrdenes(estadoOrden)
+            setOrdenesShow(estadoOrden)
+          }
+        })
         setPage(1)
       } catch (err) {
-
+        console.log(err)
       }
       setCargando(false)
     }
@@ -42,9 +53,18 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
     if (!cargando) {
       setCargando(true)
       try {
-        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/' + page + '/15/' + (Filtro != '' ? Filtro : '-'));
-        setOrdenes(ordenes.concat(request.data));
-        setOrdenesShow(ordenesShow.concat(request.data))
+        let estadoOrden: MaesterOrdenInterface[] = [];
+        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/'+page+'/15/' + (Filtro != '' ? Filtro : '-'));
+        let size: number = request.data.length;
+        request.data.map(async (x) => {
+          const request2 = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + x.prodmasterid + '/' + x.prodmasterrefid + '/' + x.itemid);
+          let req: MaesterOrdenInterface = request2.data[0]
+          estadoOrden = [...estadoOrden, req]
+          if (estadoOrden.length === size) {
+            setOrdenes(ordenes.concat(estadoOrden))
+            setOrdenesShow(ordenesShow.concat(estadoOrden))
+          }
+        })
         setPage(page + 1)
 
       } catch (err) {
@@ -54,31 +74,36 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
     }
   }
 
-  const onPress = (item: OrdennesIniciadasInterface) => {
-    changeProdMasterRefId(item.prodmasterrefid);
-    changeProdMasterId(item.prodmasterid);
-    changeItem(item.itemid)
-    //Postear
-    navigation.navigate('LavadoScreen');
+  const onPress = (item: MaesterOrdenInterface) => {
+    if (!item.posted) {
+      changeProdMasterRefId(item.prodmasterrefid);
+      changeProdMasterId(item.prodmasterid);
+      changeItem(item.itemid)
+      //Postear
+       navigation.navigate('LavadoScreen');
+  
+    }
   }
 
 
-  const renderItem = (item: OrdennesIniciadasInterface) => {
-    const onPressOrden = (item2: OrdennesIniciadasInterface) => {
+  const renderItem = (item: MaesterOrdenInterface) => {
+    const onPressOrden = (item2: MaesterOrdenInterface) => {
       onPress(item2)
     }
     return (
       <View style={{ width: '100%', alignItems: 'center' }}>
-        <View style={styles.containerRenderItem}>
+        <View style={[styles.containerRenderItem, item.posted ? { backgroundColor: blue } : null]}>
           <TouchableOpacity style={styles.renderItemTouch} onPress={() => onPressOrden(item)}>
             <View style={styles.containerIcon}>
               <Text>
-                <Icon name='document-text-sharp' size={IconHeader} color={navy} />
+                <Icon name='document-text-sharp' size={IconHeader} color={item.posted ? '#fff' : navy} />
               </Text>
             </View>
             <View style={{ width: '80%' }}>
-              <Text style={styles.text}>Orden: {item.prodmasterrefid}</Text>
-              <Text style={styles.text}>Articulo: {item.itemid}</Text>
+              <Text style={[styles.text, item.posted ? { color: '#fff' } : null]}>Orden: {item.prodmasterrefid}</Text>
+              <Text style={[styles.text, item.posted ? { color: '#fff' } : null]}>Articulo: {item.itemid}</Text>
+              <Text style={[styles.text, item.posted ? { color: '#fff' } : null]}>Estado: {item.posted ? 'Aprobado' : 'Pendiente'}</Text>
+
             </View>
           </TouchableOpacity>
         </View>
@@ -88,6 +113,11 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   useEffect(() => {
     getOrdenesIniciadas();
   }, [])
+
+  useEffect(() => {
+    getOrdenesIniciadas();
+  }, [ordenesState.OrdenId])
+
   return (
     <View style={styles.container}>
       <Header show={false} />

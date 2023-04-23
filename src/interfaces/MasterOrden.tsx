@@ -3,5 +3,6 @@ export interface MaesterOrdenInterface{
     prodmasterrefid: string;
     prodmasterid: string;
     itemid: string;
-    filename: string;
+    posted: boolean;
+    usuarioid: number
 }

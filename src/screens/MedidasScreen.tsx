@@ -220,7 +220,7 @@ const MedidasScreen = () => {
                     <View style={styles.formulario}>
                         <Text style={styles.text}>{ordenesState.lavado}</Text>
                         <Text style={styles.text}>{ordenesState.medida}</Text>
-                        <Buttons onPress={irVideoTutorial} disable={false} title='Video Ayuda' />
+                        <Buttons onPress={irVideoTutorial} disable={false} title='Tutorial' />
 
                         <MedidaContainer mostrar={T01} medida={s01} onChangeText={(value: string) => setM01(value)} value={M01} />
                         <MedidaContainer mostrar={T02} medida={s02} onChangeText={(value: string) => setM02(value)} value={M02} />
