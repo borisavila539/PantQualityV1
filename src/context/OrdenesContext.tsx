@@ -14,7 +14,8 @@ export interface OrdenesState {
     FileName: string,
     idUsuario: number,
     masterID: number,
-    TutorialLink: string
+    TutorialLink: string,
+    TallaID:string
 
 }
 
@@ -31,7 +32,8 @@ export const ordenesInitialState: OrdenesState = {
     medidaId: 0,
     lavadoID: 0,
     masterID: 0,
-    TutorialLink: ''
+    TutorialLink: '',
+    TallaID: ''
 }
 
 export interface OrdenesContextProps {
@@ -48,6 +50,7 @@ export interface OrdenesContextProps {
     changeUserid: (userid: number) => void;
     changeMasterID: (masterID: number) => void;
     changeTutorialLink: (TutorialLink: string) => void;
+    changeTallaID: (MedidaID:string) => void;
 
 }
 
@@ -98,6 +101,9 @@ export const OrdenesProvider = ({ children }: any) => {
         dispatch({ type: 'changeTutorialLink', payload: TutorialLink })
     };
 
+    const changeTallaID = (Talla: string) => {
+        dispatch({ type: 'changeTallaID', payload: Talla })
+    };
 
     return (
         <OrdenesContext.Provider value={{
@@ -113,7 +119,8 @@ export const OrdenesProvider = ({ children }: any) => {
             changeFileName,
             changeUserid,
             changeMasterID,
-            changeTutorialLink
+            changeTutorialLink,
+            changeTallaID
         }}>
             {children}
         </OrdenesContext.Provider>

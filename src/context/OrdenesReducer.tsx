@@ -13,6 +13,8 @@ type OrdenesAction =
     | { type: 'changeFileName', payload: string }
     | { type: 'changeMasterID', payload: number }
     | { type: 'changeTutorialLink', payload: string }
+    | { type: 'changeTallaID', payload: string }
+
 
 
 
@@ -78,6 +80,11 @@ export const OrdenesReducer = (state: OrdenesState, action: OrdenesAction): Orde
             return {
                 ...state,
                 TutorialLink: action.payload
+            }
+        case "changeTallaID":
+            return {
+                ...state,
+                TallaID: action.payload
             }
         default:
             return state;

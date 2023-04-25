@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react'
 import { SafeAreaView, StyleSheet, Text, View, Linking } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler';
 import { blue, grey } from '../components/colores';
-import {  TextButtons } from '../components/Constant';
+import { TextButtons } from '../components/Constant';
 import { OrdenesContext } from '../context/OrdenesContext';
 import Buttons from '../components/Buttons';
 import Header from '../components/Header';
 import { reqResApiFinanza } from '../api/reqResApi';
-import { TallasInterface, MedidasEnviarInterface } from '../interfaces/medidasInterface';
+import { TallasInterface, MedidasEnviarInterface, MedidasInterface } from '../interfaces/medidasInterface';
 import { MedidaContainer } from '../components/medidaContainer';
 import MyAlert from '../components/myAlert';
 import { useNavigation } from '@react-navigation/native';
@@ -90,7 +90,9 @@ const MedidasScreen = () => {
     const getMedidas = async () => {
         try {
             let size: number;
-            const request = await reqResApiFinanza.get<TallasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid);
+            //const request = await reqResApiFinanza.get<TallasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid);
+            const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/Medidas')
+
             size = request.data.length;
 
             //Mostrar Medidas bool
@@ -118,26 +120,26 @@ const MedidasScreen = () => {
             //llenarTallas
             let cont: number = 1;
             request.data.map(x => {
-                cont == 1 ? setS01(x.sizeid) : null
-                cont == 2 ? setS02(x.sizeid) : null
-                cont == 3 ? setS03(x.sizeid) : null
-                cont == 4 ? setS04(x.sizeid) : null
-                cont == 5 ? setS05(x.sizeid) : null
-                cont == 6 ? setS06(x.sizeid) : null
-                cont == 7 ? setS07(x.sizeid) : null
-                cont == 8 ? setS08(x.sizeid) : null
-                cont == 9 ? setS09(x.sizeid) : null
-                cont == 10 ? setS10(x.sizeid) : null
-                cont == 11 ? setS11(x.sizeid) : null
-                cont == 12 ? setS12(x.sizeid) : null
-                cont == 13 ? setS13(x.sizeid) : null
-                cont == 14 ? setS14(x.sizeid) : null
-                cont == 15 ? setS15(x.sizeid) : null
-                cont == 16 ? setS16(x.sizeid) : null
-                cont == 17 ? setS17(x.sizeid) : null
-                cont == 18 ? setS18(x.sizeid) : null
-                cont == 19 ? setS19(x.sizeid) : null
-                cont == 20 ? setS20(x.sizeid) : null
+                cont == 1 ? setS01(x.nombre) : null
+                cont == 2 ? setS02(x.nombre) : null
+                cont == 3 ? setS03(x.nombre) : null
+                cont == 4 ? setS04(x.nombre) : null
+                cont == 5 ? setS05(x.nombre) : null
+                cont == 6 ? setS06(x.nombre) : null
+                cont == 7 ? setS07(x.nombre) : null
+                cont == 8 ? setS08(x.nombre) : null
+                cont == 9 ? setS09(x.nombre) : null
+                cont == 10 ? setS10(x.nombre) : null
+                cont == 11 ? setS11(x.nombre) : null
+                cont == 12 ? setS12(x.nombre) : null
+                cont == 13 ? setS13(x.nombre) : null
+                cont == 14 ? setS14(x.nombre) : null
+                cont == 15 ? setS15(x.nombre) : null
+                cont == 16 ? setS16(x.nombre) : null
+                cont == 17 ? setS17(x.nombre) : null
+                cont == 18 ? setS18(x.nombre) : null
+                cont == 19 ? setS19(x.nombre) : null
+                cont == 20 ? setS20(x.nombre) : null
                 cont++;
 
             })
@@ -146,10 +148,10 @@ const MedidasScreen = () => {
         }
     }
 
-    const enviarMedidas = async() => {
+    const enviarMedidas = async () => {
         setEnviando(true)
-        const medidasEnviar:MedidasEnviarInterface = {
-            id:0,
+        const medidasEnviar: MedidasEnviarInterface = {
+            id: 0,
             masterID: ordenesState.masterID,
             lavadoID: ordenesState.lavadoID,
             medidaId: ordenesState.medidaId,
@@ -175,16 +177,15 @@ const MedidasScreen = () => {
             medida19: M19 != '' ? parseFloat(M19) : 0,
             medida20: M20 != '' ? parseFloat(M20) : 0,
         }
-        
-        try{
-            const request = await reqResApiFinanza.post<MedidasEnviarInterface[]>('PantsQuality/medidasInsert',medidasEnviar);
-            if( request.data[0].usuario > 0)
-            {
+
+        try {
+            const request = await reqResApiFinanza.post<MedidasEnviarInterface[]>('PantsQuality/medidasInsert', medidasEnviar);
+            if (request.data[0].usuario > 0) {
                 setMensajeAlerta('Enviado')
                 setTipoMensaje(true);
-                setShowMensajeAlerta(true);                
+                setShowMensajeAlerta(true);
             }
-        }catch(err){
+        } catch (err) {
             setMensajeAlerta('No Se encontro el archivo de excel')
             setTipoMensaje(false);
             setShowMensajeAlerta(true);
@@ -192,10 +193,10 @@ const MedidasScreen = () => {
         setEnviando(false)
     }
 
-    const irVideoTutorial = async() =>{
-        if(ordenesState.TutorialLink.length > 0){
+    const irVideoTutorial = async () => {
+        if (ordenesState.TutorialLink.length > 0) {
             Linking.openURL(ordenesState.TutorialLink)
-        }else{
+        } else {
             setMensajeAlerta('No hay Tutorial')
             setTipoMensaje(false);
             setShowMensajeAlerta(true);
@@ -206,21 +207,24 @@ const MedidasScreen = () => {
         getMedidas()
     }, [])
 
-    useEffect(()=>{
-        if(mensajeAlerta == 'Enviado' && !showMensajeAlerta){
+    useEffect(() => {
+        if (mensajeAlerta == 'Enviado' && !showMensajeAlerta) {
             navigation.goBack();
         }
-    },[showMensajeAlerta])
+    }, [showMensajeAlerta])
 
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header show={true}/>
+            <Header show={true} />
             <ScrollView style={{ height: '100%', backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>
                         <Text style={styles.text}>{ordenesState.lavado}</Text>
-                        <Text style={styles.text}>{ordenesState.medida}</Text>
-                        <Buttons onPress={irVideoTutorial} disable={false} title='Tutorial' />
+                        <Text style={styles.text}>Talla: {ordenesState.TallaID}</Text>
+                        {
+                            //<Buttons onPress={irVideoTutorial} disable={false} title='Tutorial' />
+                        }
+                        <MedidaContainer mostrar={true} medida={'Prueba'} onChangeText={(value: string) => setM01(value)} value={M01} />
 
                         <MedidaContainer mostrar={T01} medida={s01} onChangeText={(value: string) => setM01(value)} value={M01} />
                         <MedidaContainer mostrar={T02} medida={s02} onChangeText={(value: string) => setM02(value)} value={M02} />
@@ -242,12 +246,12 @@ const MedidasScreen = () => {
                         <MedidaContainer mostrar={T18} medida={s18} onChangeText={(value: string) => setM18(value)} value={M18} />
                         <MedidaContainer mostrar={T19} medida={s19} onChangeText={(value: string) => setM19(value)} value={M19} />
                         <MedidaContainer mostrar={T20} medida={s20} onChangeText={(value: string) => setM20(value)} value={M20} />
-                        
+
                         <Buttons onPress={enviarMedidas} disable={enviando} title='Enviar' />
                     </View>
                 </SafeAreaView>
             </ScrollView>
-            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)}/>
+            <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
         </View>
     )
 }

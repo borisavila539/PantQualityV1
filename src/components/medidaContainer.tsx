@@ -9,7 +9,7 @@ export const MedidaContainer = ({ mostrar, medida, onChangeText, value }: Medida
             {
                 mostrar &&
                 <TextInputContainer
-                    title={'Medida ' + medida}
+                    title={ medida}
                     justify={true}
                     height={ObjectHeigth}
                     placeholder='0.00'

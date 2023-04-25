@@ -9,29 +9,28 @@ import { TextButtons } from '../components/Constant';
 import Header from '../components/Header';
 import { RootStackParams } from '../navigation/Navigation';
 import { reqResApiFinanza } from '../api/reqResApi';
-import { MedidasInterface } from '../interfaces/medidasInterface';
+import { MedidasInterface, TallasInterface } from '../interfaces/medidasInterface';
 
 type props = StackScreenProps<RootStackParams, "TipoMedidaScreen">;
 
 
 const TipoMedidaScreen: FC<props> = ({ navigation }) => {
 
-    const { ordenesState, changemedida, changemedidaID, changeTutorialLink } = useContext(OrdenesContext);
-    const [Medidas, setMedidas] = useState<MedidasInterface[]>([])
+    const { ordenesState, changeTallaID } = useContext(OrdenesContext);
+    const [Tallas, setTallas] = useState<TallasInterface[]>([])
 
     const getMedidas = async () => {
         try {
-            const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/Medidas')
-            setMedidas(request.data)
+            const request = await reqResApiFinanza.get<TallasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid);
+            //const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/Medidas')
+            setTallas(request.data)
         } catch (err) {
 
         }
     }
 
-    const irTallas = (dato: MedidasInterface) => {
-        changemedida(dato.nombre)
-        changemedidaID(dato.id)
-        changeTutorialLink(dato.link)
+    const irTallas = (dato: TallasInterface) => {
+        changeTallaID(dato.sizeid)
         navigation.navigate('MedidasScreen')
     }
 
@@ -47,9 +46,9 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
                     <View style={styles.formulario}>
                         <Text style={styles.text}>{ordenesState.lavado}</Text>
                         {
-                            Medidas.map((medida) => {
+                            Tallas.map((talla) => {
                                 return (
-                                    <Buttons key={medida.id} onPress={() => irTallas(medida)} disable={false} title={medida.nombre} />
+                                    <Buttons onPress={() => irTallas(talla)} disable={false} title={talla.sizeid} />
                                 )
                             })
                         }
