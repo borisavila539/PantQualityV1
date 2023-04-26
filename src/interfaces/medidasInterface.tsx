@@ -10,7 +10,14 @@ export interface MedidasInterface {
     id: number,
     nombre: string,
     activo: boolean,
-    link: string
+    link: string,
+    intruccion1: string,
+    intruccion2: string,
+    intruccion3: string,
+    specs: string ,
+    referencia: string,
+    medida: string,
+    diferencia: string
 }
 
 export interface MedidasEnviarInterface {
@@ -39,4 +46,12 @@ export interface MedidasEnviarInterface {
     medida18: number,
     medida19: number,
     medida20: number,
+}
+
+export interface DatosMedidaInterface{
+    intruccion1: string,
+    intruccion2: string,
+    intruccion3: string,
+    specs: string ,
+    referencia: string
 }

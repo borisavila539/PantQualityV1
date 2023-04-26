@@ -3,4 +3,5 @@ export interface MedidaContainerInterface {
     medida: string;
     onChangeText: (value: string) => void;
     value: string;
+    editable: boolean
 }

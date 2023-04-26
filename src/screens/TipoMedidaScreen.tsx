@@ -48,7 +48,7 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
                         {
                             Tallas.map((talla) => {
                                 return (
-                                    <Buttons onPress={() => irTallas(talla)} disable={false} title={talla.sizeid} />
+                                    <Buttons key={talla.sizeid} onPress={() => irTallas(talla)} disable={false} title={talla.sizeid} />
                                 )
                             })
                         }
