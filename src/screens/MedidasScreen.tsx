@@ -6,7 +6,7 @@ import { OrdenesContext } from '../context/OrdenesContext';
 import Buttons from '../components/Buttons';
 import Header from '../components/Header';
 import { reqResApiFinanza } from '../api/reqResApi';
-import { MedidasInterface } from '../interfaces/medidasInterface';
+import { MedidasEnviarInterface, MedidasInterface } from '../interfaces/medidasInterface';
 import { MedidaContainer } from '../components/medidaContainer';
 import MyAlert from '../components/myAlert';
 import { useNavigation } from '@react-navigation/native';
@@ -34,14 +34,41 @@ const MedidasScreen = () => {
 
     const enviarMedidas = async () => {
         setEnviando(true)
-
+        try{
+            if(!enviando)
+            {
+                let m : MedidasEnviarInterface[] = [];
+                
+                medidas.map(x=>{  
+                    m.push({
+                        id: 0,
+                        idMasterOrden : ordenesState.masterID,
+                        idTalla : ordenesState.TallaID,
+                        usuarioID : ordenesState.idUsuario,
+                        idMedida : x.id,
+                        Medida: x.medida? x.medida: '0',
+                        Diferencia : x.diferencia? x.diferencia:'0',
+                        lavadoID: ordenesState.lavadoID
+                    })
+                })
+                const request = await reqResApiFinanza.post<MedidasEnviarInterface[]>('PantsQuality/medidasInsert', m);
+                console.log(request.data)
+                if(request.data[0].id > 0){
+                    if(navigation.canGoBack()){
+                        navigation.goBack()
+                    }
+                }
+            }
+        }catch(err){
+                console.log(err)
+        }
         setEnviando(false)
     }
 
     const irVideoTutorial = async (video:string) => {
         try{
             if (video.length > 0) {
-                Linking.openURL(ordenesState.TutorialLink)
+                Linking.openURL(video)
             } else {
                 setMensajeAlerta('No hay Tutorial')
                 setTipoMensaje(false);
@@ -60,7 +87,7 @@ const MedidasScreen = () => {
         return (
             <View style={{ width: '100%', alignItems: 'center' }}>
                 <View style={styles.containerRenderItem}>
-                <Buttons onPress={() =>irVideoTutorial(item.link)} disable={enviando} title='Tutorial' />
+                <Buttons onPress={() =>irVideoTutorial(item.link)} disable={false} title='Tutorial' />
 
                     <Text style={[styles.textRender,{alignSelf: 'center', fontSize: TextoPantallas + 3}]}>{item.nombre}</Text>
                     <Text style={styles.textRender}>Intruccion 1: {item.intruccion1}</Text>
