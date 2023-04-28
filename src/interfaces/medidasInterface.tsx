@@ -17,6 +17,7 @@ export interface MedidasInterface {
     specs: string ,
     referencia: string,
     medida: string,
+    medidaNumerador: string,
     diferencia: string
 }
 
@@ -27,6 +28,7 @@ export interface MedidasEnviarInterface {
     lavadoID:number,
     idTalla: string,
     Medida: string,
+    MedidaNumerador: string,
     Diferencia: string,
     usuarioID: number
 }

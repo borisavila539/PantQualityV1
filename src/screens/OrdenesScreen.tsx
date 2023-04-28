@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, FlatList, RefreshControl, ActivityIndicator, To
 import { reqResApiFinanza } from '../api/reqResApi'
 import { OrdennesIniciadasInterface } from '../interfaces/ordenesIniciadasInterface';
 import { blue, grey, navy, orange } from '../components/colores';
-import { OrdenesContext, ordenesInitialState } from '../context/OrdenesContext';
+import { OrdenesContext } from '../context/OrdenesContext';
 import { StackScreenProps } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons'
 import { FontFamily, IconHeader, TextButtons } from '../components/Constant';
