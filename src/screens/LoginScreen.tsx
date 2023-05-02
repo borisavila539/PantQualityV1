@@ -31,7 +31,7 @@ const LoginScreen: FC<props> = ({ navigation }) => {
         changeUserid(request.data[0].id)
         setUsuario("")
         setContrasena("")
-        navigation.navigate("OrdenesScreen")
+        navigation.navigate("HomeScreen")
       }
       setEnviando(false);
     } catch (err) {

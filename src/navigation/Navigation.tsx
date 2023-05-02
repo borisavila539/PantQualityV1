@@ -5,13 +5,15 @@ import OrdenesScreen from '../screens/OrdenesScreen';
 import MedidasScreen from '../screens/MedidasScreen';
 import TipoMedidaScreen from '../screens/TipoMedidaScreen';
 import LavadoScreen from '../screens/LavadoScreen';
+import HomeScreen  from '../screens/HomeScreen';
 
 export type RootStackParams = {
     LoginScreen: undefined,
     OrdenesScreen: undefined,
     MedidasScreen: undefined,
     TipoMedidaScreen: undefined,
-    LavadoScreen: undefined
+    LavadoScreen: undefined,
+    HomeScreen: undefined
 }
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -25,6 +27,7 @@ export const Navigation = () => {
                 }
             }>
             <Stack.Screen name='LoginScreen' options={{ title: 'LoginScreen' }} component={LoginScreen} />
+            <Stack.Screen name='HomeScreen' options={{title : 'HomeScreen'}}component={HomeScreen}/>
             <Stack.Screen name='OrdenesScreen' options={{ title: 'OrdenesScreen' }} component={OrdenesScreen} />
             <Stack.Screen name='MedidasScreen' options={{ title: 'MedidasScreen' }} component={MedidasScreen} />
             <Stack.Screen name='TipoMedidaScreen' options={{ title: 'TipoMedidaScreen' }} component={TipoMedidaScreen} />

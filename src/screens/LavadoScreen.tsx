@@ -18,6 +18,8 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
     const { changeLavado, ordenesState, changeOrdenId, changeLavadoID, changeMasterID } = useContext(OrdenesContext)
     const [enviando, setEnviando] = useState<boolean>(false);
     const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
+    const [showMensajeAlertaR, setShowMensajeAlertaR] = useState<boolean>(false);
+
     const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
     const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
 
@@ -49,8 +51,8 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
         setEnviando(true);
 
         try {
-            const request = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/CerrarOrden/' + ordenesState.OrdenId + '/' + ordenesState.idUsuario);
-            if (request.data[0].posted == true) {
+            const request = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/CambiarEstadoOrden/' + ordenesState.OrdenId + '/' + ordenesState.idUsuario+'/1');
+            if (request.data[0].posted === 1) {
                 changeOrdenId(0)
                 navigation.goBack();
             } else {
@@ -67,6 +69,28 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
         setShowMensajeAlerta(false)
     }
 
+    const Rechazarorden = async () => {
+        setEnviando(true);
+
+        try {
+            const request = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/CambiarEstadoOrden/' + ordenesState.OrdenId + '/' + ordenesState.idUsuario+'/2');
+            if (request.data[0].posted === 2) {
+                changeOrdenId(0)
+                navigation.goBack();
+            } else {
+                setMensajeAlerta('No se puedo actualizar el estado de la orden')
+                setTipoMensaje(false);
+                setShowMensajeAlertaR(true);
+            }
+        } catch (err) {
+            setMensajeAlerta('No se puedo actualizar el estado de la orden')
+            setTipoMensaje(false);
+            setShowMensajeAlertaR(true);
+        }
+        setEnviando(false);
+        setShowMensajeAlertaR(false)
+    }
+
     useEffect(() => {
         ObtenerDatosOrden();
     }, [])
@@ -79,14 +103,17 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
                     <View style={styles.formulario}>
                         <Buttons onPress={onPressAntes} disable={false} title='Antes del Lavado' />
                         <Buttons onPress={onPressDespues} disable={false} title='Despues del lavado' />
-                        <Buttons onPress={()=>setShowMensajeAlerta(true)} disable={enviando} title='Cerrar Orden' />
+                        <Buttons onPress={()=>setShowMensajeAlerta(true)} disable={enviando} title='Aprobar Orden' />
+                        <Buttons onPress={()=>setShowMensajeAlertaR(true)} disable={enviando} title='Rechazar Orden' />
+
                     </View>
                     <Text>
                         {ordenesState.FileName}
                     </Text>
                 </SafeAreaView>
             </ScrollView>
-        <MyAlertValidate visible={showMensajeAlerta} tipoMensaje={true} mensajeAlerta={'¿Desea Cerrar la orden?'} onPress={Cerrarorden} onPressCancel={()=>setShowMensajeAlerta(false)}/>
+        <MyAlertValidate visible={showMensajeAlerta} tipoMensaje={true} mensajeAlerta={'¿Desea Aprobar la orden?'} onPress={Cerrarorden} onPressCancel={()=>setShowMensajeAlerta(false)}/>
+        <MyAlertValidate visible={showMensajeAlertaR} tipoMensaje={true} mensajeAlerta={'¿Desea Rechazar la orden?'} onPress={Rechazarorden} onPressCancel={()=>setShowMensajeAlertaR(false)}/>
         </View>
     )
 }

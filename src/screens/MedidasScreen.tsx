@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Linking, FlatList } from 'react-native'
+import { StyleSheet, Text, View, Linking, FlatList, ActivityIndicator } from 'react-native'
 import { blue, grey, navy } from '../components/colores';
 import { FontFamily, TextButtons, TextoPantallas } from '../components/Constant';
 import { OrdenesContext } from '../context/OrdenesContext';
@@ -21,22 +21,28 @@ const MedidasScreen = () => {
     const [enviando, setEnviando] = useState<boolean>(false);
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
     const [medidas, setMedidas] = useState<MedidasInterface[]>([])
+    const [cargando, setCargando] = useState<boolean>(false)
 
     const getMedidas = async () => {
+        setCargando(true)
         try {
             const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/DatosMedida/' + ordenesState.prodmasterid + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID)
-            console.log(request.data[0])
+
             setMedidas(request.data)
+
 
         } catch (err) {
 
         }
+        setCargando(false)
     }
 
     const enviarMedidas = async () => {
         setEnviando(true)
-        try {
-            if (!enviando) {
+        let index: number = medidas.findIndex(x => parseFloat(x.medida) == 0 || (parseFloat(x.medida) == 0 && parseFloat(x.medidaNumerador) == 0) || x.medida == '' || (x.medida == '' && x.medidaNumerador == ''));
+
+        if (index == -1) {
+            try {
                 let m: MedidasEnviarInterface[] = [];
 
                 medidas.map(x => {
@@ -47,7 +53,7 @@ const MedidasScreen = () => {
                         usuarioID: ordenesState.idUsuario,
                         idMedida: x.id,
                         Medida: x.medida ? x.medida : '0',
-                        MedidaNumerador: '0',
+                        MedidaNumerador: x.medidaNumerador,
                         Diferencia: x.diferencia ? x.diferencia : '0',
                         lavadoID: ordenesState.lavadoID
                     })
@@ -58,34 +64,42 @@ const MedidasScreen = () => {
                         navigation.goBack()
                     }
                 }
+            } catch (err) {
+                console.log(err)
             }
-        } catch (err) {
-            console.log(err)
+        } else {
+            setMensajeAlerta('No se ha especificado la medida: ' + medidas[index].nombre )
+            setTipoMensaje(false);
+            setShowMensajeAlerta(true);
         }
         setEnviando(false)
     }
 
     const irVideoTutorial = async (video: string) => {
-        try {
-            if (video.length > 0) {
-                Linking.openURL(video)
-            } else {
-                setMensajeAlerta('No hay Tutorial')
+        if (!enviando) {
+            try {
+                if (video.length > 0) {
+                    Linking.openURL(video)
+                } else {
+                    setMensajeAlerta('No hay Tutorial')
+                    setTipoMensaje(false);
+                    setShowMensajeAlerta(true);
+                }
+            } catch (err) {
+                setMensajeAlerta('Error de conexion')
                 setTipoMensaje(false);
                 setShowMensajeAlerta(true);
             }
-        } catch (err) {
-            setMensajeAlerta('Error de conexion')
-            setTipoMensaje(false);
-            setShowMensajeAlerta(true);
         }
 
     }
 
     const renderItem = (item: MedidasInterface, index: number) => {
-        
+
         const validarNum = (txt: string): string => {
             if (!Number.isNaN(parseInt(txt))) {
+                txt = parseFloat(txt).toFixed(4);
+                console.log(txt)
                 return (parseInt(txt) != 0 ? parseInt(txt) + ' ' : '') + Math.round(parseFloat((parseFloat(txt) - parseInt(txt)).toFixed(4)) * 16) + '/16'
             } else {
                 return txt;
@@ -103,7 +117,7 @@ const MedidasScreen = () => {
                     <Text style={styles.textRender}>Spec: {validarNum(item.specs)}</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
                         <View style={{ flex: 1 }}>
-                            <MedidaContainer editable={true} mostrar={true} medida={'Medida'}
+                            <MedidaContainer editable={!enviando} mostrar={true} medida={'Medida'}
                                 onChangeText={(value: string) => {
                                     const nuevasMedidas = [...medidas];
                                     nuevasMedidas[index].medida = value;
@@ -111,10 +125,10 @@ const MedidasScreen = () => {
                                     nuevasMedidas[index].diferencia = parseFloat(nuevasMedidas[index].diferencia).toFixed(4).toString()
                                     setMedidas(nuevasMedidas);
                                 }}
-                                value={item.medida} />
+                                value={parseFloat(item.medida) > 0 ? item.medida : '' } />
                         </View>
                         <View style={{ flex: 1 }}>
-                            <MedidaContainer editable={true} mostrar={true} medida={''}
+                            <MedidaContainer editable={!enviando} mostrar={true} medida={''}
                                 onChangeText={(value: string) => {
                                     const nuevasMedidas = [...medidas];
                                     nuevasMedidas[index].medidaNumerador = value;
@@ -122,7 +136,7 @@ const MedidasScreen = () => {
                                     nuevasMedidas[index].diferencia = parseFloat(nuevasMedidas[index].diferencia).toFixed(4).toString()
                                     setMedidas(nuevasMedidas);
                                 }}
-                                value={item.medidaNumerador} />
+                                value={parseFloat(item.medidaNumerador) > 0 ? item.medidaNumerador : '' } />
                         </View>
                         <Text style={[styles.textRender, { marginBottom: 5, fontSize: 30 }]}>/</Text>
 
@@ -156,16 +170,32 @@ const MedidasScreen = () => {
             <View style={styles.formulario}>
                 <Text style={styles.text}>{ordenesState.lavado}</Text>
                 <Text style={styles.text}>Talla: {ordenesState.TallaID}</Text>
-                <Buttons onPress={enviarMedidas} disable={enviando} title='Enviar' />
+                {
+                    !cargando && medidas.length > 0 &&
+                    <Buttons onPress={enviarMedidas} disable={enviando} title='Enviar' />
+
+                }
             </View>
+            {
+                cargando ?
+                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                        <ActivityIndicator color={navy} size={'large'} />
+                        <Text style={styles.text}>Cargando informacion del Excel...</Text>
+                    </View>
+                    :
 
-            <FlatList
-                data={medidas}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item, index }) => renderItem(item, index)}
-                style={{ flex: 1, width: '100%' }}
-            />
-
+                    medidas.length > 0 ?
+                        <FlatList
+                            data={medidas}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item, index }) => renderItem(item, index)}
+                            style={{ flex: 1, width: '100%' }}
+                        />
+                        :
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={styles.text}>No se encontro el archivo...</Text>
+                        </View>
+            }
             <MyAlert visible={showMensajeAlerta} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlerta(false)} />
         </View>
     )

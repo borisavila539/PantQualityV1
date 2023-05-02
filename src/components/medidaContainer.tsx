@@ -10,7 +10,7 @@ export const MedidaContainer = ({ mostrar, medida, onChangeText, value,editable 
                 mostrar &&
                 <TextInputContainer
                     title={ medida}
-                    justify={true}
+                    justify={false}
                     height={ObjectHeigth}
                     placeholder='0'
                     teclado={'decimal-pad'}

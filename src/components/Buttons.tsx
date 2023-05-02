@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     fontSize: TextButtons,
     color: '#fff',
     fontWeight: 'bold',
-    fontFamily: 'sans-serif'
+    fontFamily: 'sans-serif',
+    textAlign: 'center'
   },
 });
 

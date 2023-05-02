@@ -18,7 +18,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   const [ordenes, setOrdenes] = useState<MaesterOrdenInterface[]>([])
   const [ordenesShow, setOrdenesShow] = useState<MaesterOrdenInterface[]>([])
 
-  const { ordenesState,changeProdMasterRefId, changeProdMasterId, changeItem } = useContext(OrdenesContext)
+  const { ordenesState, changeProdMasterRefId, changeProdMasterId, changeItem } = useContext(OrdenesContext)
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [Filtro, setFiltro] = useState<string>('');
   const [page, setPage] = useState<number>(0);
@@ -54,7 +54,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
       setCargando(true)
       try {
         let estadoOrden: MaesterOrdenInterface[] = [];
-        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/'+page+'/15/' + (Filtro != '' ? Filtro : '-'));
+        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/' + page + '/15/' + (Filtro != '' ? Filtro : '-'));
         let size: number = request.data.length;
         request.data.map(async (x) => {
           const request2 = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + x.prodmasterid + '/' + x.prodmasterrefid + '/' + x.itemid);
@@ -75,13 +75,13 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   }
 
   const onPress = (item: MaesterOrdenInterface) => {
-    if (!item.posted) {
+    if (item.posted != 1) {
       changeProdMasterRefId(item.prodmasterrefid);
       changeProdMasterId(item.prodmasterid);
       changeItem(item.itemid)
       //Postear
-       navigation.navigate('LavadoScreen');
-  
+      navigation.navigate('LavadoScreen');
+
     }
   }
 
@@ -90,9 +90,22 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
     const onPressOrden = (item2: MaesterOrdenInterface) => {
       onPress(item2)
     }
+    const getColor = (): string => {
+
+      switch (item.posted) {
+        case 0:
+          return grey;
+        case 1:
+          return blue;
+        case 2:
+          return orange
+        default:
+          return '#000';
+      }
+    }
     return (
       <View style={{ width: '100%', alignItems: 'center' }}>
-        <View style={[styles.containerRenderItem, item.posted ? { backgroundColor: blue } : null]}>
+        <View style={[styles.containerRenderItem, {backgroundColor: getColor()}]}>
           <TouchableOpacity style={styles.renderItemTouch} onPress={() => onPressOrden(item)}>
             <View style={styles.containerIcon}>
               <Text>
