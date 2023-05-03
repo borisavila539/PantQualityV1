@@ -19,6 +19,8 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
     const [enviando, setEnviando] = useState<boolean>(false);
     const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
     const [showMensajeAlertaR, setShowMensajeAlertaR] = useState<boolean>(false);
+    const [showMensajeAlertaE, setShowMensajeAlertaE] = useState<boolean>(false);
+
 
     const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
     const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
@@ -31,7 +33,7 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
                 changeMasterID(request.data[0].id)
             }
         } catch (err) {
-            console.log('no consulto nombre archivo')
+            
         }
     }
 
@@ -58,12 +60,12 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
             } else {
                 setMensajeAlerta('No se puedo actualizar el estado de la orden')
                 setTipoMensaje(false);
-                setShowMensajeAlerta(true);
+                setShowMensajeAlertaE(true);
             }
         } catch (err) {
             setMensajeAlerta('No se puedo actualizar el estado de la orden')
             setTipoMensaje(false);
-            setShowMensajeAlerta(true);
+            setShowMensajeAlertaE(true);
         }
         setEnviando(false);
         setShowMensajeAlerta(false)
@@ -80,12 +82,12 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
             } else {
                 setMensajeAlerta('No se puedo actualizar el estado de la orden')
                 setTipoMensaje(false);
-                setShowMensajeAlertaR(true);
+                setShowMensajeAlertaE(true);
             }
         } catch (err) {
             setMensajeAlerta('No se puedo actualizar el estado de la orden')
             setTipoMensaje(false);
-            setShowMensajeAlertaR(true);
+            setShowMensajeAlertaE(true);
         }
         setEnviando(false);
         setShowMensajeAlertaR(false)
@@ -112,6 +114,7 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
                     </Text>
                 </SafeAreaView>
             </ScrollView>
+        <MyAlert visible={showMensajeAlertaE} tipoMensaje={tipoMensaje} mensajeAlerta={mensajeAlerta} onPress={() => setShowMensajeAlertaE(false)}/>
         <MyAlertValidate visible={showMensajeAlerta} tipoMensaje={true} mensajeAlerta={'¿Desea Aprobar la orden?'} onPress={Cerrarorden} onPressCancel={()=>setShowMensajeAlerta(false)}/>
         <MyAlertValidate visible={showMensajeAlertaR} tipoMensaje={true} mensajeAlerta={'¿Desea Rechazar la orden?'} onPress={Rechazarorden} onPressCancel={()=>setShowMensajeAlertaR(false)}/>
         </View>

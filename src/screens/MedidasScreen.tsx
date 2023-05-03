@@ -26,12 +26,12 @@ const MedidasScreen = () => {
     const getMedidas = async () => {
         setCargando(true)
         try {
+            console.log('PantsQuality/DatosMedida/' + ordenesState.prodmasterid.replace(" ","-") + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID)
             const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/DatosMedida/' + ordenesState.prodmasterid + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID)
-
+            console.log(request.data)
             setMedidas(request.data)
-
-
         } catch (err) {
+            console.log(err)
 
         }
         setCargando(false)
@@ -65,7 +65,7 @@ const MedidasScreen = () => {
                     }
                 }
             } catch (err) {
-                console.log(err)
+                
             }
         } else {
             setMensajeAlerta('No se ha especificado la medida: ' + medidas[index].nombre )
@@ -99,8 +99,9 @@ const MedidasScreen = () => {
         const validarNum = (txt: string): string => {
             if (!Number.isNaN(parseInt(txt))) {
                 txt = parseFloat(txt).toFixed(4);
-                console.log(txt)
-                return (parseInt(txt) != 0 ? parseInt(txt) + ' ' : '') + Math.round(parseFloat((parseFloat(txt) - parseInt(txt)).toFixed(4)) * 16) + '/16'
+                let entero = parseInt(txt)
+                let fraccion = Math.round(parseFloat((parseFloat(txt) - parseInt(txt)).toFixed(4)) * 16)
+                return (entero != 0 ? entero + ' ' : (parseFloat(txt) < 0 ? '-' : '')) +( fraccion != 0 ? (fraccion < 0 ? -fraccion : fraccion) +'/16' :'') 
             } else {
                 return txt;
             }

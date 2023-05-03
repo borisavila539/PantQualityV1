@@ -15,15 +15,13 @@ const Buttons: FC<ButtonsInterface> = ({ onPress, disable, title }) => {
       onPress={onPress}
       hitSlop={{ top: 10, bottom: 20, left: 20, right: 20 }}
       disabled={disable}
-
     >
       <View style={styles.button} >
         {
           !disable ?
-          <Text style={styles.text}>{title}</Text>
-          :
-          <ActivityIndicator color="#FFF" />
-          
+            <Text style={styles.text}>{title}</Text>
+            :
+            <ActivityIndicator color="#FFF" />
         }
       </View>
     </TouchableOpacity>
