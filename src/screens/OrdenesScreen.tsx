@@ -98,14 +98,26 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
         case 1:
           return blue;
         case 2:
-          return orange
+          return orange;
         default:
           return '#000';
       }
     }
+      const getAprobacion = (): string => {
+        switch (item.posted) {
+          case 0:
+            return 'Pendiente'
+          case 1:
+            return 'Aprobado'
+          case 2:
+            return 'Rechazado'
+          default:
+            return 'Pendiente'
+        }
+    }
     return (
       <View style={{ width: '100%', alignItems: 'center' }}>
-        <View style={[styles.containerRenderItem, {backgroundColor: getColor()}]}>
+        <View style={[styles.containerRenderItem, { backgroundColor: getColor() }]}>
           <TouchableOpacity style={styles.renderItemTouch} onPress={() => onPressOrden(item)}>
             <View style={styles.containerIcon}>
               <Text>
@@ -115,7 +127,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
             <View style={{ width: '80%' }}>
               <Text style={[styles.text, item.posted ? { color: '#fff' } : null]}>Orden: {item.prodmasterrefid}</Text>
               <Text style={[styles.text, item.posted ? { color: '#fff' } : null]}>Articulo: {item.itemid}</Text>
-              <Text style={[styles.text, item.posted ? { color: '#fff' } : null]}>Estado: {item.posted ? 'Aprobado' : 'Pendiente'}</Text>
+              <Text style={[styles.text, item.posted ? { color: '#fff' } : null]}>Estado: {getAprobacion()}</Text>
 
             </View>
           </TouchableOpacity>

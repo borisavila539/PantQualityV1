@@ -22,7 +22,7 @@ export interface MedidasInterface {
 }
 
 export interface MedidasEnviarInterface {
-    id:number,
+    ID:number,
     idMasterOrden: number,
     idMedida: number,
     lavadoID:number,

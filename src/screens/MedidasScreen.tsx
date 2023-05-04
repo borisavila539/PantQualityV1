@@ -26,9 +26,9 @@ const MedidasScreen = () => {
     const getMedidas = async () => {
         setCargando(true)
         try {
-            console.log('PantsQuality/DatosMedida/' + ordenesState.prodmasterid.replace(" ","-") + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID)
+            //console.log('PantsQuality/DatosMedida/' + ordenesState.prodmasterid.replace(" ","-") + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID)
             const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/DatosMedida/' + ordenesState.prodmasterid + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID)
-            console.log(request.data)
+            //console.log(request.data)
             setMedidas(request.data)
         } catch (err) {
             console.log(err)
@@ -47,7 +47,7 @@ const MedidasScreen = () => {
 
                 medidas.map(x => {
                     m.push({
-                        id: 0,
+                        ID: 0,
                         idMasterOrden: ordenesState.masterID,
                         idTalla: ordenesState.TallaID,
                         usuarioID: ordenesState.idUsuario,
@@ -59,13 +59,14 @@ const MedidasScreen = () => {
                     })
                 })
                 const request = await reqResApiFinanza.post<MedidasEnviarInterface[]>('PantsQuality/medidasInsert', m);
-                if (request.data[0].id > 0) {
+                console.log(request.data)
+                if (request.data.length > 0) {
                     if (navigation.canGoBack()) {
                         navigation.goBack()
                     }
                 }
             } catch (err) {
-                
+                console.log(err)
             }
         } else {
             setMensajeAlerta('No se ha especificado la medida: ' + medidas[index].nombre )
