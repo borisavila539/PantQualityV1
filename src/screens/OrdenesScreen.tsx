@@ -96,9 +96,9 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
         case 0:
           return grey;
         case 1:
-          return blue;
+          return '#367E18';
         case 2:
-          return orange;
+          return '#CC3636';
         default:
           return '#000';
       }

@@ -18,7 +18,9 @@ export interface MedidasInterface {
     referencia: string,
     medida: string,
     medidaNumerador: string,
-    diferencia: string
+    diferencia: string,
+    tolerancia1: string,
+    tolerancia2: string
 }
 
 export interface MedidasEnviarInterface {

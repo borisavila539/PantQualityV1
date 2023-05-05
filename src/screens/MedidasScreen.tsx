@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Linking, FlatList, ActivityIndicator } from 'react-native'
-import { blue, grey, navy } from '../components/colores';
+import { blue, grey, navy, orange } from '../components/colores';
 import { FontFamily, TextButtons, TextoPantallas } from '../components/Constant';
 import { OrdenesContext } from '../context/OrdenesContext';
 import Buttons from '../components/Buttons';
@@ -69,7 +69,7 @@ const MedidasScreen = () => {
                 console.log(err)
             }
         } else {
-            setMensajeAlerta('No se ha especificado la medida: ' + medidas[index].nombre )
+            setMensajeAlerta('No se ha especificado la medida: ' + medidas[index].nombre)
             setTipoMensaje(false);
             setShowMensajeAlerta(true);
         }
@@ -96,26 +96,40 @@ const MedidasScreen = () => {
     }
 
     const renderItem = (item: MedidasInterface, index: number) => {
+        const getColor = (): string => {
+            let medidaIngresada: number = parseFloat(item.medida) + parseFloat(item.medidaNumerador) / 16;
+            let spec: number = parseFloat(item.specs)
+            let resultado: number = medidaIngresada - spec;
+
+            if (eval(item.tolerancia1) >= resultado &&  eval(item.tolerancia2) <= resultado) {
+                return navy
+            } else {
+                return 'red'
+            }
+
+        }
 
         const validarNum = (txt: string): string => {
             if (!Number.isNaN(parseInt(txt))) {
                 txt = parseFloat(txt).toFixed(4);
                 let entero = parseInt(txt)
                 let fraccion = Math.round(parseFloat((parseFloat(txt) - parseInt(txt)).toFixed(4)) * 16)
-                return (entero != 0 ? entero + ' ' : (parseFloat(txt) < 0 ? '-' : '')) +( fraccion != 0 ? (fraccion < 0 ? -fraccion : fraccion) +'/16' :'') 
+                return (entero != 0 ? entero + ' ' : (parseFloat(txt) < 0 ? '-' : '')) + (fraccion != 0 ? (fraccion < 0 ? -fraccion : fraccion) + '/16' : '')
             } else {
                 return txt;
             }
         }
         return (
             <View style={{ width: '100%', alignItems: 'center' }}>
-                <View style={styles.containerRenderItem}>
+                <View style={[styles.containerRenderItem,{borderColor: getColor() }]}>
                     <Buttons onPress={() => irVideoTutorial(item.link)} disable={false} title='Tutorial' />
 
                     <Text style={[styles.textRender, { alignSelf: 'center', fontSize: TextoPantallas + 3 }]}>{item.nombre}</Text>
+                    <Text style={styles.textRender}>Altura Asiento: {validarNum(item.referencia)} </Text>
                     <Text style={styles.textRender}>Intruccion 1: {validarNum(item.intruccion1)}</Text>
                     <Text style={styles.textRender}>Intruccion 2: {validarNum(item.intruccion2)}</Text>
                     <Text style={styles.textRender}>Intruccion 3: {validarNum(item.intruccion3)}</Text>
+
                     <Text style={styles.textRender}>Spec: {validarNum(item.specs)}</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
                         <View style={{ flex: 1 }}>
@@ -127,7 +141,7 @@ const MedidasScreen = () => {
                                     nuevasMedidas[index].diferencia = parseFloat(nuevasMedidas[index].diferencia).toFixed(4).toString()
                                     setMedidas(nuevasMedidas);
                                 }}
-                                value={parseFloat(item.medida) > 0 ? item.medida : '' } />
+                                value={parseFloat(item.medida) > 0 ? item.medida : ''} />
                         </View>
                         <View style={{ flex: 1 }}>
                             <MedidaContainer editable={!enviando} mostrar={true} medida={''}
@@ -138,7 +152,7 @@ const MedidasScreen = () => {
                                     nuevasMedidas[index].diferencia = parseFloat(nuevasMedidas[index].diferencia).toFixed(4).toString()
                                     setMedidas(nuevasMedidas);
                                 }}
-                                value={parseFloat(item.medidaNumerador) > 0 ? item.medidaNumerador : '' } />
+                                value={parseFloat(item.medidaNumerador) > 0 ? item.medidaNumerador : ''} />
                         </View>
                         <Text style={[styles.textRender, { marginBottom: 5, fontSize: 30 }]}>/</Text>
 
@@ -149,7 +163,6 @@ const MedidasScreen = () => {
                         </View>
                     </View>
                     <Text style={styles.textRender}>Diferencia: {validarNum((parseFloat(item.specs.length > 0 ? parseFloat(item.specs).toFixed(4) : '0') - (parseFloat(item.medidaNumerador.length > 0 ? item.medidaNumerador : '0') / 16 + parseFloat(item.medida.length > 0 ? item.medida : '0'))).toFixed(4))} </Text>
-                    <Text style={styles.textRender}>Referencia: {validarNum(item.referencia)} </Text>
                 </View>
             </View>
         )
@@ -228,7 +241,7 @@ const styles = StyleSheet.create({
     containerRenderItem: {
         maxWidth: 450,
         width: '90%',
-        borderWidth: 1.5,
+        borderWidth: 3,
         paddingHorizontal: 10,
         paddingVertical: 5,
         borderRadius: 5,
