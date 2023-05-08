@@ -42,13 +42,14 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
         let estadoOrden: MaesterOrdenInterface[] = [];
         const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/0/15/' + (Filtro != '' ? Filtro : '-'));
         let size: number = request.data.length;
-        let cont = 1;
+        let cont = 0;
         request.data.map(async (x) => {
           const request2 = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + x.prodmasterid + '/' + x.prodmasterrefid + '/' + x.itemid + '/' + estado);
+          cont++;
           if (request2.data.length > 0) {
             estadoOrden = [...estadoOrden, request2.data[0]]
           }
-          cont++;
+          
           if (cont === size) {
             setOrdenes(estadoOrden)
             setOrdenesShow(estadoOrden)
@@ -60,6 +61,8 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
       }
       setCargando(false)
     }
+    setCargando(false)
+
   }
 
   const getOrdenesIniciadasMas = async () => {
@@ -84,6 +87,8 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
       }
       setCargando(false)
     }
+    setCargando(false)
+
   }
 
   const onPress = (item: MaesterOrdenInterface) => {
@@ -190,7 +195,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
               onChangeText={(value) => setFiltro(value)}
               value={Filtro}
             />
-            <TouchableOpacity onPress={getOrdenesIniciadas}>
+            <TouchableOpacity onPress={() => getOrdenesIniciadas()}>
               <Text>
                 <Icon name='search-sharp' size={30} color={navy} />
               </Text>
