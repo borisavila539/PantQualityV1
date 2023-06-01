@@ -35,9 +35,10 @@ const ModulosScreen: FC<props> = ({ navigation }) => {
     useEffect(() => {
         getModulos();
     }, [])
+
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header show={false} />
+            <Header show={false} deleteCredencials={true}/>
             <ScrollView style={{ flex: 1, backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <Text style={styles.text}>Selecione Modulo</Text>
@@ -53,9 +54,6 @@ const ModulosScreen: FC<props> = ({ navigation }) => {
                     </View>
                 </SafeAreaView>
             </ScrollView>
-            <Text>
-                modulos
-            </Text>
         </View>
     )
 }

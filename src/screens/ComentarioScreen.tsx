@@ -21,6 +21,7 @@ const ComentarioScreen: FC<props> = ({ navigation }) => {
     const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
     const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
 
+
     const getComentarios = async () => {
         try {
             const request = await reqResApiFinanza.get<comentariosInterface[]>('PantsQuality/comentarios/' + ordenesState.masterID);
@@ -76,7 +77,7 @@ const ComentarioScreen: FC<props> = ({ navigation }) => {
     
     return (
         <View style={{ flex: 1, backgroundColor: grey, alignItems: 'center' }}>
-            <Header show={true} />
+            <Header show={true} deleteCredencials={false}/>
             <View style={styles.sendMessage}>
                 <TextInput
                     style={styles.input}

@@ -26,6 +26,8 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   const [page, setPage] = useState<number>(0);
   const [cargando, setCargando] = useState<boolean>(false);
   const [estado, setEstado] = useState<number>(-1);
+  const [logout, setLogout] = useState<boolean>(false);
+
 
   let estados: estadoInterface[] = [
     { id: -1, text: 'Todos' },
@@ -56,6 +58,12 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
           }
         })
         setPage(1)
+
+        if (ordenesState.Rol === "Comentario") {
+          setLogout(true)
+        } else {
+          setLogout(false)
+        }
       } catch (err) {
         console.log(err)
       }
@@ -189,7 +197,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Header show={false} />
+      <Header show={false} deleteCredencials={logout} />
       <View style={{ width: '100%', alignItems: 'center' }}>
 
         <View style={styles.containerBuscar}>

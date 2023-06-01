@@ -20,7 +20,8 @@ export interface MedidasInterface {
     medidaNumerador: string,
     diferencia: string,
     tolerancia1: string,
-    tolerancia2: string
+    tolerancia2: string,
+    version: number
 }
 
 export interface MedidasEnviarInterface {
@@ -34,6 +35,7 @@ export interface MedidasEnviarInterface {
     Diferencia: string,
     usuarioID: number,
     moduloId: number,
+    version: number
 }
 
 export interface DatosMedidaInterface {

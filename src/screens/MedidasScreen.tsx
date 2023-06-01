@@ -12,6 +12,7 @@ import MyAlert from '../components/myAlert';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParams } from '../navigation/Navigation';
+import { Medidas } from '../components/Medidas';
 
 const MedidasScreen = () => {
     const { ordenesState } = useContext(OrdenesContext)
@@ -28,6 +29,7 @@ const MedidasScreen = () => {
         try {
             const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/DatosMedida/' + ordenesState.prodmasterid + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID);
             setMedidas(request.data)
+            console.log(request.data[0].version)
         } catch (err) {
             console.log(err);
         }
@@ -53,14 +55,27 @@ const MedidasScreen = () => {
                         MedidaNumerador: x.medidaNumerador,
                         Diferencia: x.diferencia ? x.diferencia : '0',
                         lavadoID: ordenesState.lavadoID,
-                        moduloId: ordenesState.ModuloId
+                        moduloId: ordenesState.ModuloId,
+                        version: medidas[0].version
                     })
                 })
                 const request = await reqResApiFinanza.post<MedidasEnviarInterface[]>('PantsQuality/medidasInsert', m);
                 if (request.data.length > 0) {
-                    if (navigation.canGoBack()) {
-                        navigation.goBack()
+                    let x = 0;
+                    const nuevasMedidas = [...medidas];
+                    while (x < medidas.length) {
+                        nuevasMedidas[x].version++;
+                        x = x + 1;
                     }
+                    setMedidas(nuevasMedidas)
+
+                    setMensajeAlerta('Verision ' + medidas[0].version + ' Ingresada')
+                    setTipoMensaje(true);
+                    setShowMensajeAlerta(true);
+                } else {
+                    setMensajeAlerta('Error al guardar datos')
+                    setTipoMensaje(false);
+                    setShowMensajeAlerta(true);
                 }
             } catch (err) {
                 console.log(err)
@@ -158,13 +173,19 @@ const MedidasScreen = () => {
 
     return (
         <View style={{ flex: 1, backgroundColor: grey, alignItems: 'center' }}>
-            <Header show={true} />
+            <Header show={true} deleteCredencials={false} />
             <View style={styles.formulario}>
                 <Text style={styles.text}>{ordenesState.lavado}</Text>
                 <Text style={styles.text}>Talla: {ordenesState.TallaID}</Text>
                 {
+                    medidas.length > 0 &&
+                    <Text style={styles.text}>Versiones Ingresadas: {medidas[0].version}</Text>
+
+                }
+
+                {
                     !cargando && medidas.length > 0 &&
-                    <Buttons onPress={enviarMedidas} disable={enviando} title='Enviar' />
+                    <Buttons onPress={enviarMedidas} disable={enviando} title={'Enviar Version ' + (medidas[0].version +1)}  />
 
                 }
             </View>

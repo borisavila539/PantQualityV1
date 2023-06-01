@@ -40,7 +40,7 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header show={true} />
+            <Header show={true} deleteCredencials={false}/>
             <ScrollView style={{ height: '100%', backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>

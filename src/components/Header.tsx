@@ -8,16 +8,23 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackParams } from '../navigation/Navigation'
 import { StackNavigationProp } from '@react-navigation/stack'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
 
 interface headerInterface {
-    show: boolean
+    show: boolean,
+    deleteCredencials: boolean
 }
 
-const Header: FC<headerInterface> = ({ show }) => {
+const Header: FC<headerInterface> = ({ show, deleteCredencials }) => {
     const { ordenesState } = useContext(OrdenesContext);
     const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
 
-    const navigateBack = () => {
+    const navigateBack = async() => {
+        if(deleteCredencials){
+            await AsyncStorage.setItem('usuarioID','');
+            await AsyncStorage.setItem('rol','');
+        }
         if (navigation.canGoBack()) {
             navigation.goBack();
         }

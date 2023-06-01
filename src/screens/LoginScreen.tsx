@@ -1,4 +1,4 @@
-import React, { FC, useState, useContext } from 'react'
+import React, { FC, useState, useContext, useEffect } from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, Pressable, ActivityIndicator, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { TextButtons } from '../components/Constant'
@@ -9,7 +9,7 @@ import MyAlert from '../components/myAlert'
 import { RootStackParams } from '../navigation/Navigation'
 import { usuario } from '../interfaces/reqResApi'
 import { OrdenesContext } from '../context/OrdenesContext'
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type props = StackScreenProps<RootStackParams, "LoginScreen">;
 
@@ -28,6 +28,10 @@ const LoginScreen: FC<props> = ({ navigation }) => {
       setEnviando(true);
       const request = await reqResApiFinanza.get<usuario[]>('PantsQuality/usuario/' + usuario + '/' + contrasena);
       if (request.data[0].activo === true) {
+
+        await AsyncStorage.setItem('usuarioID',request.data[0].id.toString());
+        await AsyncStorage.setItem('rol',request.data[0].rol);
+
         changeRol(request.data[0].rol)
         changeUserid(request.data[0].id)
         setUsuario("")
@@ -46,6 +50,25 @@ const LoginScreen: FC<props> = ({ navigation }) => {
       setEnviando(false);
     }
   }
+
+  const getData = async() =>{
+    const usuarioID = await AsyncStorage.getItem('usuarioID');
+    const rol = await AsyncStorage.getItem('rol')
+
+    if(usuarioID && rol){
+      changeRol(rol)
+      changeUserid(parseInt(usuarioID))
+      if (rol === "Comentario") {
+        navigation.navigate("OrdenesScreen")
+      } else {
+        navigation.navigate("ModulosScreen")
+      }
+    }
+  }
+
+  useEffect(()=>{
+    getData();
+  },[])
 
   return (
     <View style={{ flex: 1, position: 'relative' }}>
