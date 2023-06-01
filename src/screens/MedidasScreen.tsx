@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Linking, FlatList, ActivityIndicator } from 'react-native'
-import { blue, grey, navy, orange } from '../components/colores';
+import { StyleSheet, Text, View, FlatList, ActivityIndicator } from 'react-native'
+import { black, blue, grey, navy } from '../components/colores';
 import { FontFamily, TextButtons, TextoPantallas } from '../components/Constant';
 import { OrdenesContext } from '../context/OrdenesContext';
 import Buttons from '../components/Buttons';
@@ -26,13 +26,10 @@ const MedidasScreen = () => {
     const getMedidas = async () => {
         setCargando(true)
         try {
-            //console.log('PantsQuality/DatosMedida/' + ordenesState.prodmasterid.replace(" ","-") + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID)
-            const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/DatosMedida/' + ordenesState.prodmasterid + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID)
-            //console.log(request.data)
+            const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/DatosMedida/' + ordenesState.prodmasterid + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID);
             setMedidas(request.data)
         } catch (err) {
-            console.log(err)
-
+            console.log(err);
         }
         setCargando(false)
     }
@@ -55,11 +52,11 @@ const MedidasScreen = () => {
                         Medida: x.medida ? x.medida : '0',
                         MedidaNumerador: x.medidaNumerador,
                         Diferencia: x.diferencia ? x.diferencia : '0',
-                        lavadoID: ordenesState.lavadoID
+                        lavadoID: ordenesState.lavadoID,
+                        moduloId: ordenesState.ModuloId
                     })
                 })
                 const request = await reqResApiFinanza.post<MedidasEnviarInterface[]>('PantsQuality/medidasInsert', m);
-                console.log(request.data)
                 if (request.data.length > 0) {
                     if (navigation.canGoBack()) {
                         navigation.goBack()
@@ -76,32 +73,13 @@ const MedidasScreen = () => {
         setEnviando(false)
     }
 
-    const irVideoTutorial = async (video: string) => {
-        if (!enviando) {
-            try {
-                if (video.length > 0) {
-                    Linking.openURL(video)
-                } else {
-                    setMensajeAlerta('No hay Tutorial')
-                    setTipoMensaje(false);
-                    setShowMensajeAlerta(true);
-                }
-            } catch (err) {
-                setMensajeAlerta('Error de conexion')
-                setTipoMensaje(false);
-                setShowMensajeAlerta(true);
-            }
-        }
-
-    }
-
     const renderItem = (item: MedidasInterface, index: number) => {
         const getColor = (): string => {
             let medidaIngresada: number = parseFloat(item.medida) + parseFloat(item.medidaNumerador) / 16;
             let spec: number = parseFloat(item.specs)
             let resultado: number = medidaIngresada - spec;
 
-            if (eval(item.tolerancia1) >= resultado &&  eval(item.tolerancia2) <= resultado) {
+            if (eval(item.tolerancia1 != '-' ? item.tolerancia1 : '0') >= resultado && eval(item.tolerancia2 != '-' ? item.tolerancia2 : '0') <= resultado) {
                 return navy
             } else {
                 return 'red'
@@ -121,14 +99,12 @@ const MedidasScreen = () => {
         }
         return (
             <View style={{ width: '100%', alignItems: 'center' }}>
-                <View style={[styles.containerRenderItem,{borderColor: getColor() }]}>
-                    <Buttons onPress={() => irVideoTutorial(item.link)} disable={false} title='Tutorial' />
-
+                <View style={[styles.containerRenderItem, { borderColor: getColor() }]}>
                     <Text style={[styles.textRender, { alignSelf: 'center', fontSize: TextoPantallas + 3 }]}>{item.nombre}</Text>
                     <Text style={styles.textRender}>Altura Asiento: {validarNum(item.referencia)} </Text>
                     <Text style={styles.textRender}>Intruccion 1: {validarNum(item.intruccion1)}</Text>
                     <Text style={styles.textRender}>Intruccion 2: {validarNum(item.intruccion2)}</Text>
-                    <Text style={styles.textRender}>Intruccion 3: {validarNum(item.intruccion3)}</Text>
+                    <Text style={[styles.textRender, { color: blue }]}>Intruccion 3: {validarNum(item.intruccion3)}</Text>
 
                     <Text style={styles.textRender}>Spec: {validarNum(item.specs)}</Text>
                     <View style={{ flexDirection: 'row', alignItems: 'flex-end' }}>
@@ -137,7 +113,7 @@ const MedidasScreen = () => {
                                 onChangeText={(value: string) => {
                                     const nuevasMedidas = [...medidas];
                                     nuevasMedidas[index].medida = value;
-                                    nuevasMedidas[index].diferencia = (parseFloat(nuevasMedidas[index].specs.length > 0 ? parseFloat(nuevasMedidas[index].specs).toFixed(4) : '0') - (parseFloat(nuevasMedidas[index].medidaNumerador.length > 0 ? nuevasMedidas[index].medidaNumerador : '0') / 16 + parseFloat(nuevasMedidas[index].medida.length > 0 ? nuevasMedidas[index].medida : '0'))).toString();
+                                    nuevasMedidas[index].diferencia = ((parseFloat(nuevasMedidas[index].medidaNumerador.length > 0 ? nuevasMedidas[index].medidaNumerador : '0') / 16 + parseFloat(nuevasMedidas[index].medida.length > 0 ? nuevasMedidas[index].medida : '0')) - parseFloat(nuevasMedidas[index].specs.length > 0 ? parseFloat(nuevasMedidas[index].specs).toFixed(4) : '0')).toString();
                                     nuevasMedidas[index].diferencia = parseFloat(nuevasMedidas[index].diferencia).toFixed(4).toString()
                                     setMedidas(nuevasMedidas);
                                 }}
@@ -148,7 +124,7 @@ const MedidasScreen = () => {
                                 onChangeText={(value: string) => {
                                     const nuevasMedidas = [...medidas];
                                     nuevasMedidas[index].medidaNumerador = value;
-                                    nuevasMedidas[index].diferencia = (parseFloat(nuevasMedidas[index].specs.length > 0 ? parseFloat(nuevasMedidas[index].specs).toFixed(4) : '0') - (parseFloat(nuevasMedidas[index].medidaNumerador.length > 0 ? nuevasMedidas[index].medidaNumerador : '0') / 16 + parseFloat(nuevasMedidas[index].medida.length > 0 ? nuevasMedidas[index].medida : '0'))).toString();
+                                    nuevasMedidas[index].diferencia = ((parseFloat(nuevasMedidas[index].medidaNumerador.length > 0 ? nuevasMedidas[index].medidaNumerador : '0') / 16 + parseFloat(nuevasMedidas[index].medida.length > 0 ? nuevasMedidas[index].medida : '0')) - parseFloat(nuevasMedidas[index].specs.length > 0 ? parseFloat(nuevasMedidas[index].specs).toFixed(4) : '0')).toString();
                                     nuevasMedidas[index].diferencia = parseFloat(nuevasMedidas[index].diferencia).toFixed(4).toString()
                                     setMedidas(nuevasMedidas);
                                 }}
@@ -162,7 +138,8 @@ const MedidasScreen = () => {
                                 value={'16'} />
                         </View>
                     </View>
-                    <Text style={styles.textRender}>Diferencia: {validarNum((parseFloat(item.specs.length > 0 ? parseFloat(item.specs).toFixed(4) : '0') - (parseFloat(item.medidaNumerador.length > 0 ? item.medidaNumerador : '0') / 16 + parseFloat(item.medida.length > 0 ? item.medida : '0'))).toFixed(4))} </Text>
+
+                    <Text style={styles.textRender}>Diferencia: {validarNum(item.diferencia)} </Text>
                 </View>
             </View>
         )
@@ -253,7 +230,7 @@ const styles = StyleSheet.create({
     textRender: {
         fontSize: TextoPantallas,
         fontWeight: 'bold',
-        color: navy,
+        color: black,
         fontFamily: FontFamily
     },
 });

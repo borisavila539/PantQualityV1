@@ -2,6 +2,6 @@ export interface usuario {
     id: number,
     usuario: string,
     password: string,
-    rolid: number,
+    rol: string,
     activo: boolean
 }

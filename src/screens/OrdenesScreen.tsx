@@ -20,7 +20,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   const [ordenes, setOrdenes] = useState<MaesterOrdenInterface[]>([])
   const [ordenesShow, setOrdenesShow] = useState<MaesterOrdenInterface[]>([])
 
-  const { ordenesState, changeProdMasterRefId, changeProdMasterId, changeItem , changeMasterID} = useContext(OrdenesContext)
+  const { ordenesState, changeProdMasterRefId, changeProdMasterId, changeItem, changeMasterID } = useContext(OrdenesContext)
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [Filtro, setFiltro] = useState<string>('');
   const [page, setPage] = useState<number>(0);
@@ -49,7 +49,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
           if (request2.data.length > 0) {
             estadoOrden = [...estadoOrden, request2.data[0]]
           }
-          
+
           if (cont === size) {
             setOrdenes(estadoOrden)
             setOrdenesShow(estadoOrden)
@@ -96,10 +96,15 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
       changeProdMasterRefId(item.prodmasterrefid);
       changeProdMasterId(item.prodmasterid);
       changeItem(item.itemid),
-      changeMasterID(item.id)
-      
+        changeMasterID(item.id)
+
       //Postear
-      navigation.navigate('LavadoScreen');
+      if (ordenesState.Rol === "Comentario") {
+        navigation.navigate("ComentarioScreen")
+
+      } else {
+        navigation.navigate('HomeScreen');
+      }
 
     }
   }

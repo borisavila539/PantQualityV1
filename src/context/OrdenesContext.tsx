@@ -15,7 +15,9 @@ export interface OrdenesState {
     idUsuario: number,
     masterID: number,
     TutorialLink: string,
-    TallaID:string
+    TallaID: string,
+    ModuloId: number,
+    Rol: string
 
 }
 
@@ -33,7 +35,9 @@ export const ordenesInitialState: OrdenesState = {
     lavadoID: 0,
     masterID: 0,
     TutorialLink: '',
-    TallaID: ''
+    TallaID: '',
+    ModuloId: 0,
+    Rol: ''
 }
 
 export interface OrdenesContextProps {
@@ -50,7 +54,9 @@ export interface OrdenesContextProps {
     changeUserid: (userid: number) => void;
     changeMasterID: (masterID: number) => void;
     changeTutorialLink: (TutorialLink: string) => void;
-    changeTallaID: (MedidaID:string) => void;
+    changeTallaID: (MedidaID: string) => void;
+    changeModuloId: (ModuloId: number) => void;
+    changeRol: (rol: string) => void;
 
 }
 
@@ -105,6 +111,14 @@ export const OrdenesProvider = ({ children }: any) => {
         dispatch({ type: 'changeTallaID', payload: Talla })
     };
 
+    const changeModuloId = (ModuloId: number) => {
+        dispatch({ type: 'ChangeModuloID', payload: ModuloId })
+    }
+
+    const changeRol = (rol: string) => {
+        dispatch({ type: 'ChangeRol', payload: rol })
+    }
+
     return (
         <OrdenesContext.Provider value={{
             ordenesState: ordenesState,
@@ -120,7 +134,9 @@ export const OrdenesProvider = ({ children }: any) => {
             changeUserid,
             changeMasterID,
             changeTutorialLink,
-            changeTallaID
+            changeTallaID,
+            changeModuloId,
+            changeRol
         }}>
             {children}
         </OrdenesContext.Provider>

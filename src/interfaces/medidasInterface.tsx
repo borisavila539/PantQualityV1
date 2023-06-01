@@ -14,7 +14,7 @@ export interface MedidasInterface {
     intruccion1: string,
     intruccion2: string,
     intruccion3: string,
-    specs: string ,
+    specs: string,
     referencia: string,
     medida: string,
     medidaNumerador: string,
@@ -24,21 +24,22 @@ export interface MedidasInterface {
 }
 
 export interface MedidasEnviarInterface {
-    ID:number,
+    ID: number,
     idMasterOrden: number,
     idMedida: number,
-    lavadoID:number,
+    lavadoID: number,
     idTalla: string,
     Medida: string,
     MedidaNumerador: string,
     Diferencia: string,
-    usuarioID: number
+    usuarioID: number,
+    moduloId: number,
 }
 
-export interface DatosMedidaInterface{
+export interface DatosMedidaInterface {
     intruccion1: string,
     intruccion2: string,
     intruccion3: string,
-    specs: string ,
+    specs: string,
     referencia: string
 }

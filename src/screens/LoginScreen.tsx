@@ -1,5 +1,5 @@
-import React, { FC, useState, useContext, useEffect } from 'react'
-import { View, StyleSheet, TextInput, Alert, TouchableOpacity, Text, Pressable, ActivityIndicator, Image } from 'react-native'
+import React, { FC, useState, useContext } from 'react'
+import { View, StyleSheet, TextInput, TouchableOpacity, Text, Pressable, ActivityIndicator, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { TextButtons } from '../components/Constant'
 import { reqResApiFinanza } from '../api/reqResApi'
@@ -21,17 +21,22 @@ const LoginScreen: FC<props> = ({ navigation }) => {
   const [showMensajeAlerta, setShowMensajeAlerta] = useState<boolean>(false);
   const [tipoMensaje, setTipoMensaje] = useState<boolean>(false);
   const [mensajeAlerta, setMensajeAlerta] = useState<string>('');
-  const { changeUserid } = useContext(OrdenesContext)
+  const { changeUserid, changeRol } = useContext(OrdenesContext);
 
   const login = async () => {
     try {
       setEnviando(true);
       const request = await reqResApiFinanza.get<usuario[]>('PantsQuality/usuario/' + usuario + '/' + contrasena);
       if (request.data[0].activo === true) {
+        changeRol(request.data[0].rol)
         changeUserid(request.data[0].id)
         setUsuario("")
         setContrasena("")
-        navigation.navigate("HomeScreen")
+        if (request.data[0].rol === "Comentario") {
+          navigation.navigate("OrdenesScreen")
+        } else {
+          navigation.navigate("ModulosScreen")
+        }
       }
       setEnviando(false);
     } catch (err) {
