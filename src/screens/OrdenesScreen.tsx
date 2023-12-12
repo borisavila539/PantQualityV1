@@ -103,8 +103,8 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
     if (item.posted != 1) {
       changeProdMasterRefId(item.prodmasterrefid);
       changeProdMasterId(item.prodmasterid);
-      changeItem(item.itemid),
-        changeMasterID(item.id)
+      changeItem(item.itemid);
+      changeMasterID(item.id)
 
       //Postear
       if (ordenesState.Rol === "Comentario") {
