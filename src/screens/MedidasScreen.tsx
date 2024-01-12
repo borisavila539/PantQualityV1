@@ -27,10 +27,11 @@ const MedidasScreen = () => {
     const getMedidas = async () => {
         setCargando(true)
         try {
-            const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/DatosMedida/' + ordenesState.prodmasterid + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID);
+            const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/DatosMedida/' + ordenesState.prodMasterRefID + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID);
             setMedidas(request.data)
             console.log(request.data[0].version)
         } catch (err) {
+            console.log('no carga medidas')
             console.log(err);
         }
         setCargando(false)

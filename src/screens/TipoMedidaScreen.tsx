@@ -21,10 +21,12 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
 
     const getMedidas = async () => {
         try {
-            const request = await reqResApiFinanza.get<TallasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid);
+            const request = await reqResApiFinanza.get<TallasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid+'/'+ordenesState.prodMasterRefID);
             //const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/Medidas')
             setTallas(request.data)
         } catch (err) {
+            console.log('No carga'+ ordenesState.itemid+'/'+ordenesState.prodMasterRefID)
+            console.log(err)
 
         }
     }

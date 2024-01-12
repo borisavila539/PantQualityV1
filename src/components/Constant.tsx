@@ -5,7 +5,7 @@ const TextoPantallas = parseInt(PixelRatio.getFontScale() * 15.22 + "");//16 - 2
 const ObjectHeigth = parseInt(PixelRatio.getFontScale() * 35.87 + "");//35 - 2
 const TextoHeader = parseInt(PixelRatio.getFontScale() * 17.39 + "");//18 - 2
 const IconHeader = parseInt(PixelRatio.getFontScale() * 41.30 + "");//40 - 2
-const APIFinanzas = "http://10.100.1.11:8091/api/";//10.100.1.11:8091
+const APIFinanzas = "http://10.100.2.17:8092/api/";//10.100.1.11:8091 -- 10.100.2.17:8092
 const FontFamily = 'sans-serif';
 
 export { TextButtons, TextoPantallas, FontFamily, ObjectHeigth, TextoHeader, APIFinanzas, IconHeader }

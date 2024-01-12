@@ -37,20 +37,35 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   ]
   let estadosTex: string[] = ['Todos', 'Pendiente', 'Aprobado', 'Rechazado']
   const getOrdenesIniciadas = async () => {
+    console.log(cargando)
     if (!cargando) {
       setCargando(true)
-
+      console.log('con'+cargando)
       try {
         let estadoOrden: MaesterOrdenInterface[] = [];
-        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/0/15/' + (Filtro != '' ? Filtro : '-'));
+        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/0/10/' + (Filtro != '' ? Filtro : '-'));
         let size: number = request.data.length;
         let cont = 0;
+        console.log(request.data)
         request.data.map(async (x) => {
-          const request2 = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + x.prodmasterid + '/' + x.prodmasterrefid + '/' + x.itemid + '/' + estado);
-          cont++;
-          if (request2.data.length > 0) {
-            estadoOrden = [...estadoOrden, request2.data[0]]
+          try{
+            console.log('PantsQuality/orden/' + x.prodmasterid + '/' + x.prodmasterrefid + '/' + x.itemid + '/' + estado)
+            await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + x.prodmasterid + '/' + x.prodmasterrefid + '/' + x.itemid + '/' + estado).then(request2 => {
+              //console.log(request2.data[0])
+              cont++;
+              if (request2.data.length > 0) {
+                estadoOrden = [...estadoOrden, request2.data[0]]
+              }
+            }).catch(err=>{
+              console.log(x.prodmasterid)
+            });
+          }catch(err){
+            console.log(x.prodmasterid)
+            console.log(x)
           }
+
+        
+
 
           if (cont === size) {
             setOrdenes(estadoOrden)
@@ -65,6 +80,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
           setLogout(false)
         }
       } catch (err) {
+        setCargando(false)
         console.log(err)
       }
       setCargando(false)
@@ -78,15 +94,22 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
       setCargando(true)
       try {
         let estadoOrden: MaesterOrdenInterface[] = [];
-        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/' + page + '/15/' + (Filtro != '' ? Filtro : '-'));
+        const request = await reqResApiFinanza.get<OrdennesIniciadasInterface[]>('PantsQuality/OrdenesIniciadas/' + page + '/10/' + (Filtro != '' ? Filtro : '-'));
         let size: number = request.data.length;
         request.data.map(async (x) => {
-          const request2 = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + x.prodmasterid + '/' + x.prodmasterrefid + '/' + x.itemid + '/' + estado);
-          if (request2.data.length > 0) {
-            estadoOrden = [...estadoOrden, request2.data[0]]
-            setOrdenes(ordenes.concat(estadoOrden))
-            setOrdenesShow(ordenesShow.concat(estadoOrden))
+          try{
+            const request2 = await reqResApiFinanza.get<MaesterOrdenInterface[]>('PantsQuality/orden/' + x.prodmasterid + '/' + x.prodmasterrefid + '/' + x.itemid + '/' + estado).then(request2=>{
+              if (request2.data.length > 0) {
+                estadoOrden = [...estadoOrden, request2.data[0]]
+                setOrdenes(ordenes.concat(estadoOrden))
+                setOrdenesShow(ordenesShow.concat(estadoOrden))
+              }
+            });
+          }catch(err){
+            console.log(x)
           }
+          
+          
         })
         setPage(page + 1)
 
@@ -188,11 +211,12 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
   }
 
   useEffect(() => {
-    getOrdenesIniciadas();
+    //if(!cargando)
+    //getOrdenesIniciadas()
   }, [])
 
   useEffect(() => {
-    getOrdenesIniciadas();
+    getOrdenesIniciadas()
   }, [ordenesState.OrdenId, estado])
 
   return (
@@ -210,7 +234,7 @@ const OrdenesScreen: FC<props> = ({ navigation }) => {
               onChangeText={(value) => setFiltro(value)}
               value={Filtro}
             />
-            <TouchableOpacity onPress={() => getOrdenesIniciadas()}>
+            <TouchableOpacity onPress={()=>getOrdenesIniciadas()}>
               <Text>
                 <Icon name='search-sharp' size={30} color={navy} />
               </Text>
