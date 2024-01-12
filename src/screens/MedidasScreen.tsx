@@ -29,7 +29,7 @@ const MedidasScreen = () => {
         try {
             const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/DatosMedida/' + ordenesState.prodMasterRefID + '/' + ordenesState.TallaID + '/' + ordenesState.lavadoID);
             setMedidas(request.data)
-            console.log(request.data[0].version)
+            //console.log(request.data)
         } catch (err) {
             console.log('no carga medidas')
             console.log(err);
@@ -194,7 +194,7 @@ const MedidasScreen = () => {
                 cargando ?
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                         <ActivityIndicator color={navy} size={'large'} />
-                        <Text style={styles.text}>Cargando informacion del Excel...</Text>
+                        <Text style={styles.text}>Cargando informacion...</Text>
                     </View>
                     :
 
