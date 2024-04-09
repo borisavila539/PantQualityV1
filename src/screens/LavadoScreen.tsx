@@ -124,7 +124,10 @@ const LavadoScreen: FC<props> = ({ navigation }) => {
                 
                     <View style={styles.formulario}>
                         <Buttons onPress={onPressAntes} disable={false} title='Antes del Lavado' />
-                        <Buttons onPress={onPressDespues} disable={false} title='Despues del lavado' />
+                        {
+                            ordenesState.TipoMedida == "Auditoria Final" &&
+                            <Buttons onPress={onPressDespues} disable={false} title='Despues del lavado' />
+                        }
                         <Buttons onPress={() => setShowMensajeAlerta(true)} disable={enviando} title='Aprobar Orden' />
                         <Buttons onPress={() => setShowMensajeAlertaR(true)} disable={enviando} title='Rechazar Orden' />
                         {

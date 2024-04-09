@@ -10,6 +10,7 @@ import Header from '../components/Header';
 import { RootStackParams } from '../navigation/Navigation';
 import { reqResApiFinanza } from '../api/reqResApi';
 import { MedidasInterface, TallasInterface } from '../interfaces/medidasInterface';
+import { TallasEstiloInterface } from '../interfaces/EstilosInterface';
 
 type props = StackScreenProps<RootStackParams, "TipoMedidaScreen">;
 
@@ -20,15 +21,39 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
     const [Tallas, setTallas] = useState<TallasInterface[]>([])
 
     const getMedidas = async () => {
-        try {
-            const request = await reqResApiFinanza.get<TallasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid+'/'+ordenesState.prodMasterRefID);
-            //const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/Medidas')
-            setTallas(request.data)
-        } catch (err) {
-            console.log('No carga'+ ordenesState.itemid+'/'+ordenesState.prodMasterRefID)
-            console.log(err)
+        if (ordenesState.ModuloName != "Pre-Produccion") {
+            try {
+                const request = await reqResApiFinanza.get<TallasInterface[]>('PantsQuality/tallas/' + ordenesState.itemid + '/' + ordenesState.prodMasterRefID);
+                //const request = await reqResApiFinanza.get<MedidasInterface[]>('PantsQuality/Medidas')
+                setTallas(request.data)
+            } catch (err) {
+                console.log('No carga' + ordenesState.itemid + '/' + ordenesState.prodMasterRefID)
+                console.log(err)
 
+            }
+        } else {
+            try{
+                let data:TallasInterface[]=[]
+                reqResApiFinanza.get<TallasEstiloInterface[]>('PantsQuality/TallasEstilos/'+ordenesState.prodMasterRefID)
+                .then(resp =>{
+                    resp.data.map(element =>{
+                        let tmp: TallasInterface = {
+                            itemid:element.estilo,
+                            seT_TALLAS: element.set,
+                            sizechartid: element.tallas,
+                            sizeid: element.tallas
+                        }
+                        data.push(tmp)
+                        if(resp.data.length == data.length){
+                            setTallas(data)
+                        }
+                    })
+                })
+            }catch(err){
+                console.log('err')
+            }
         }
+
     }
 
     const irTallas = (dato: TallasInterface) => {
@@ -42,7 +67,7 @@ const TipoMedidaScreen: FC<props> = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: grey }}>
-            <Header show={true} deleteCredencials={false}/>
+            <Header show={true} deleteCredencials={false} />
             <ScrollView style={{ height: '100%', backgroundColor: grey }}>
                 <SafeAreaView style={styles.container}>
                     <View style={styles.formulario}>

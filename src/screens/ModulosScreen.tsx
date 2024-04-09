@@ -16,7 +16,7 @@ type props = StackScreenProps<RootStackParams, "ModulosScreen">;
 
 const ModulosScreen: FC<props> = ({ navigation }) => {
     const [modulos, setModulos] = useState<ModulosInterface[]>([]);
-    const { changeModuloId } = useContext(OrdenesContext);
+    const { changeModuloId,changeModuloName } = useContext(OrdenesContext);
 
     const getModulos = async () => {
         try {
@@ -29,6 +29,7 @@ const ModulosScreen: FC<props> = ({ navigation }) => {
 
     const selectModulo = (modulo: ModulosInterface) => {
         changeModuloId(modulo.id)
+        changeModuloName(modulo.modulo)
         navigation.navigate("OrdenesScreen");
     }
 

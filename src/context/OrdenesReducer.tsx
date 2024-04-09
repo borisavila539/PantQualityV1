@@ -16,6 +16,9 @@ type OrdenesAction =
     | { type: 'changeTallaID', payload: string }
     | { type: 'ChangeModuloID', payload: number }
     | { type: 'ChangeRol', payload: string }
+    | { type: 'ChangeTipoMedida', payload: string }
+    | { type: 'ChangeTipoMedidaID', payload: number }
+    | { type: 'changeModuloName', payload: string }
 
 
 
@@ -97,6 +100,21 @@ export const OrdenesReducer = (state: OrdenesState, action: OrdenesAction): Orde
             return {
                 ...state,
                 Rol: action.payload
+            }
+        case "ChangeTipoMedida":
+            return {
+                ...state,
+                TipoMedida: action.payload
+            }
+        case "ChangeTipoMedidaID":
+            return {
+                ...state,
+                TipoMedidaID: action.payload
+            }
+        case "changeModuloName":
+            return {
+                ...state,
+                ModuloName: action.payload
             }
         default:
             return state;

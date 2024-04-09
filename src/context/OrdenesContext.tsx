@@ -17,7 +17,11 @@ export interface OrdenesState {
     TutorialLink: string,
     TallaID: string,
     ModuloId: number,
-    Rol: string
+    ModuloName: string,
+    Rol: string,
+    TipoMedida: string,
+    TipoMedidaID: number,
+
 
 }
 
@@ -37,7 +41,11 @@ export const ordenesInitialState: OrdenesState = {
     TutorialLink: '',
     TallaID: '',
     ModuloId: 0,
-    Rol: ''
+    ModuloName: '',
+    Rol: '',
+    TipoMedida: '',
+    TipoMedidaID: 0
+
 }
 
 export interface OrdenesContextProps {
@@ -57,7 +65,9 @@ export interface OrdenesContextProps {
     changeTallaID: (MedidaID: string) => void;
     changeModuloId: (ModuloId: number) => void;
     changeRol: (rol: string) => void;
-
+    changeTipoMedida: (TipoMedida: string) => void;
+    changeTipoMedidaID: (TipoMedida: number) => void
+    changeModuloName: (ModuloName: string) => void
 }
 
 //Crear el contexto
@@ -119,6 +129,17 @@ export const OrdenesProvider = ({ children }: any) => {
         dispatch({ type: 'ChangeRol', payload: rol })
     }
 
+    const changeTipoMedida = (TipoMedida: string) => {
+        dispatch({ type: 'ChangeTipoMedida', payload: TipoMedida })
+    }
+
+    const changeTipoMedidaID = (TipoMedidaID: number) => {
+        dispatch({ type: 'ChangeTipoMedidaID', payload: TipoMedidaID })
+    }
+
+    const changeModuloName = (ModuloName: string) => {
+        dispatch({ type: 'changeModuloName', payload: ModuloName })
+    }
     return (
         <OrdenesContext.Provider value={{
             ordenesState: ordenesState,
@@ -136,7 +157,10 @@ export const OrdenesProvider = ({ children }: any) => {
             changeTutorialLink,
             changeTallaID,
             changeModuloId,
-            changeRol
+            changeRol,
+            changeTipoMedida,
+            changeTipoMedidaID,
+            changeModuloName
         }}>
             {children}
         </OrdenesContext.Provider>
